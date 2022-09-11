@@ -1,0 +1,15 @@
+name: WarBridge
+main: org.sobadfish.warbridge.WarBridgeMain
+version: 1.0.0
+api:
+  - 1.0.11
+  - 3.0.0
+author: sobadfish
+load: POSTWORLD
+description: "战桥小游戏插件"
+
+softdepend:
+  - ScoreboardPlugin
+
+loadbefore:
+  - ScoreboardPlugin
