@@ -8,15 +8,9 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.bedwar.BedWarMain;
-import org.sobadfish.bedwar.event.PlayerChoseTeamEvent;
-import org.sobadfish.bedwar.event.TeamDefeatEvent;
-import org.sobadfish.bedwar.event.TeamVictoryEvent;
-import org.sobadfish.bedwar.item.team.TeamEffectInfo;
-import org.sobadfish.bedwar.item.team.TeamTrap;
-import org.sobadfish.bedwar.player.PlayerInfo;
-import org.sobadfish.bedwar.player.team.config.TeamInfoConfig;
-import org.sobadfish.bedwar.room.GameRoom;
+import org.sobadfish.warbridge.player.PlayerInfo;
+import org.sobadfish.warbridge.player.team.config.TeamInfoConfig;
+import org.sobadfish.warbridge.room.GameRoom;
 
 import java.util.ArrayList;
 
@@ -47,21 +41,10 @@ public class TeamInfo {
     }
 
 
-    private final ArrayList<TeamEffectInfo> teamEffects = new ArrayList<>();
-
-
-
-    public ArrayList<TeamEffectInfo> getTeamEffects() {
-        return teamEffects;
-    }
-
     public boolean isClose() {
         return close;
     }
 
-    public boolean isBadExists() {
-        return badExists;
-    }
 
     public boolean isLoading() {
         return !stop;
@@ -207,20 +190,7 @@ public class TeamInfo {
                 d++;
             }
         }
-        if(teamEffects.contains(new TeamEffectInfo(new TeamTrap(1)))){
-            for(PlayerInfo playerInfo: room.getPlayerInfos()){
-                if( !playerInfo.isLive() || playerInfo.isWatch() || playerInfo.getTeamInfo() == null || playerInfo.getTeamInfo().equals(this) ){
-                    continue;
-                }
-                if(playerInfo.getPlayer().distance(getTeamConfig().getBedPosition()) <= 5){
-                    teamEffects.remove(new TeamEffectInfo(new TeamTrap(1)));
-                    //TODO 陷阱触发
-                    sendTitle(playerInfo+" &c触发了陷阱");
-                    playerInfo.getPlayer().addEffect(Effect.getEffect(15).setAmplifier(1).setDuration(60));
-                    playerInfo.getPlayer().addEffect(Effect.getEffect(4).setAmplifier(1).setDuration(60));
-                }
-            }
-        }
+
 
 
         if(d == getTeamPlayers().size()){
@@ -231,44 +201,7 @@ public class TeamInfo {
         }
 
     }
-    public void placeBed(){
-        //尝试修复床透明的问题
-        if(!getTeamConfig().getBedPosition().getChunk().isLoaded()){
-//            try {
-//                getTeamConfig().getBedPosition().getChunk().load();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-            getTeamConfig().getBedPosition().getLevel().loadChunk(getTeamConfig().getBedPosition().getChunkX(),getTeamConfig().getBedPosition().getChunkZ());
-        }
-        if(!getTeamConfig().getSpawnPosition().getChunk().isLoaded()){
-            getTeamConfig().getSpawnPosition().getLevel().loadChunk(getTeamConfig().getSpawnPosition().getChunkX(),getTeamConfig().getSpawnPosition().getChunkZ());
-        }
-
-        BlockBed blockBed = new BlockBed();
-        getTeamConfig().getBedPosition().getLevel().setBlock(getTeamConfig().getBedPosition(), Block.get(26,0),true,true);
-        Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
-        getTeamConfig().getBedPosition().getLevel().setBlock(pos2, Block.get(26,getTeamConfig().getBedFace().getHorizontalIndex()|8),true,true);
-
-
-
-    }
-
-    public void onBedBreak(PlayerInfo info){
-        room.sendTitle(this+" &c床被破坏！");
-        room.sendSubTitle("&7摧毁者: &r"+info);
-        room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
-
-        setBadExists(false);
-    }
-
-    public void breakBed(){
-        badExists = false;
-        getTeamConfig().getBedPosition().getLevel().setBlock( getTeamConfig().getBedPosition(),new BlockAir());
-        Position pos2 = getTeamConfig().getBedPosition().getSide(getTeamConfig().getBedFace());
-        room.addSound(Sound.MOB_ENDERDRAGON_GROWL);
-        getTeamConfig().getBedPosition().getLevel().setBlock(pos2,new BlockAir(),true,true);
-    }
+   
 
     public boolean join(PlayerInfo info){
         PlayerChoseTeamEvent event = new PlayerChoseTeamEvent(info,this,room, BedWarMain.getBedWarMain());
