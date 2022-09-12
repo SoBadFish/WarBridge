@@ -23,6 +23,7 @@ import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.WorldResetManager;
 import org.sobadfish.warbridge.player.PlayerInfo;
 import org.sobadfish.warbridge.player.team.TeamInfo;
+import org.sobadfish.warbridge.player.team.config.TeamInfoConfig;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
 import org.sobadfish.warbridge.room.floattext.FloatTextInfo;
 import org.sobadfish.warbridge.room.floattext.FloatTextInfoConfig;
@@ -84,6 +85,9 @@ public class GameRoom {
         this.worldInfo = new WorldInfo(this,roomConfig.worldInfo);
 
         type = GameType.WAIT;
+        for(TeamInfoConfig config: getRoomConfig().getTeamConfigs()){
+            teamInfos.add(new TeamInfo(this,config));
+        }
 
         //启动事件
 
@@ -463,7 +467,11 @@ public class GameRoom {
                     Server.getInstance().getPluginManager().callEvent(event);
                     if(((Player) info.getPlayer()).isOnline()) {
                         if (teleport) {
-                            info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                            if(Server.getInstance().getDefaultLevel() == null){
+                                info.getPlayer().teleport(info.player.getLevel().getSafeSpawn());
+                            }else {
+                                info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                            }
                         }
                         info.getPlayer().removeAllEffects();
                         ((Player) info.getPlayer()).setExperience(0, 0);

@@ -92,7 +92,7 @@ public class WarBridgeAdminCommand extends Command {
                         return false;
                     }
                 }else{
-                    commandSender.sendMessage(TextFormat.colorize('&',"/bd set [内容] &e首次创建为房间名称"));
+                    commandSender.sendMessage(TextFormat.colorize('&',"/wba set [内容] &e首次创建为房间名称"));
                     return false;
                 }
             case "end":
@@ -108,7 +108,7 @@ public class WarBridgeAdminCommand extends Command {
             case "float":
                 if(strings.length < 4){
 
-                    commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                    commandSender.sendMessage("指令参数错误 执行/wba help 查看帮助");
                     return false;
                 }
                 if(commandSender instanceof Player) {
@@ -127,7 +127,7 @@ public class WarBridgeAdminCommand extends Command {
 
                     }else{
                         if(strings.length < 5){
-                            commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                            commandSender.sendMessage("指令参数错误 执行/wba help 查看帮助");
                             return false;
                         }
                         if(roomConfig.notHasFloatText(strings[3])){
