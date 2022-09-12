@@ -111,7 +111,6 @@ public class ThreadManager {
     }
 
     public static void init() {
-        ThreadManager.schedule(new RunnableCheck());
         //TODO 线程
         ThreadManager.schedule(new RunnableCheck());
         ThreadManager.schedule(new PluginMasterRunnable(),1);

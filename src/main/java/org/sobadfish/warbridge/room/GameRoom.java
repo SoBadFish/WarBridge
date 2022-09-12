@@ -68,6 +68,8 @@ public class GameRoom {
 
     public int gameStart = 0;
 
+    public boolean resetStart = false;
+
     private GameType type;
 
     private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
@@ -602,6 +604,10 @@ public class GameRoom {
         }
         if(gameStart > 0){
             gameStart--;
+        }else if(resetStart){
+            //移除产生的方块
+
+            resetStart = false;
         }
         if(loadTime > 0) {
 
@@ -629,6 +635,7 @@ public class GameRoom {
             if(teamInfos.size() > 0) {
                 for (TeamInfo info : teamInfos) {
                     if(info.score > score){
+                        score = info.score;
                         successInfo = info;
                     }
                     info.onUpdate();
@@ -784,6 +791,7 @@ public class GameRoom {
             teamInfo.score += 1;
             //TODO 当队伍获得分数
             gameStart = 5;
+            resetStart = true;
             cause = playerInfo+"获得一分";
 
 

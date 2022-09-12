@@ -308,14 +308,16 @@ public class RoomManager implements Listener {
             TeamInfo teamInfo = info.getTeamInfo();
             GameRoom room = info.getGameRoom();
             if(room != null && room.getType() == GameType.START){
-                if(room.gameStart > 0){
-                    if(player.getFloorX() != event.getTo().getFloorX() && player.getFloorZ() != event.getTo().getFloorZ()){
-                        event.setCancelled();
-                    }
-                }
                 if(info.isWatch()){
                     return;
                 }
+                if(room.resetStart){
+                    if(event.getFrom().getFloorX() != event.getTo().getFloorX() && event.getFrom().getFloorZ() != event.getTo().getFloorZ()){
+                        event.setCancelled();
+                        return;
+                    }
+                }
+
                 Position position;
                 for(TeamInfo teamInfo1: room.getTeamInfos()){
                     position = teamInfo1.getTeamConfig().getScorePosition();

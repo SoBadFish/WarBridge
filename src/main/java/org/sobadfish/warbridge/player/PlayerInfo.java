@@ -511,12 +511,11 @@ public class PlayerInfo {
     @Override
     public String toString(){
         String teamName = "&r";
-        String playerName = "&7"+player.getName();
+        String playerName = player.getName();
         if(teamInfo != null && !isWatch()){
-            teamName = "&7[&r"+teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName()+"&7]&r";
-            playerName = teamInfo.getTeamConfig().getNameColor()+" &7"+player.getName();
+            teamName = teamInfo.getTeamConfig().getNameColor();
         }else if(isWatch()){
-            teamName = "&7[旁观] ";
+            teamName = "&7 ";
         }
 
         return teamName+playerName;
@@ -615,7 +614,7 @@ public class PlayerInfo {
     public void onUpdate(){
 
         //TODO 玩家更新线程
-        if(gameRoom != null && gameRoom.gameStart > 1){
+        if(gameRoom != null && gameRoom.gameStart > 0){
             sendTitle(gameRoom.cause, 2);
             sendSubTitle("&7将在&a"+gameRoom.gameStart+"&7秒后开始");
         }
