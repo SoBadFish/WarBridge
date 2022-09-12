@@ -129,6 +129,8 @@ public class Utils {
             ) {
                 if(y) {
                     return player.y <= location.y;
+                }else{
+                    return true;
                 }
 
             }

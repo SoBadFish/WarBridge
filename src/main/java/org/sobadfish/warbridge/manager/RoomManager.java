@@ -33,6 +33,7 @@ import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.WarBridgeMain;
@@ -310,8 +311,21 @@ public class RoomManager implements Listener {
                 if(info.isWatch()){
                     return;
                 }
+                Position position;
+                for(TeamInfo teamInfo1: room.getTeamInfos()){
+                    position = teamInfo1.getTeamConfig().getScorePosition();
+                    if(Utils.inArea(player,position,true)){
+                        if(teamInfo1.equals(teamInfo)){
+                            info.spawn();
+                        }else{
+                            room.addScore(info);
+                        }
+                    }
+
+                }
+
                 if(room.resetStart){
-                    if(event.getFrom().getFloorX() != event.getTo().getFloorX() && event.getFrom().getFloorZ() != event.getTo().getFloorZ()){
+                    if(event.getFrom().getFloorX() != event.getTo().getFloorX() || event.getFrom().getFloorZ() != event.getTo().getFloorZ()){
                         event.setCancelled();
 
                     }
