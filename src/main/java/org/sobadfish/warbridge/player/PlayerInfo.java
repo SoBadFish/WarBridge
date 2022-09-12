@@ -9,6 +9,9 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.PlayerEnderChestInventory;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.item.*;
+import cn.nukkit.item.enchantment.Enchantment;
+import cn.nukkit.level.Level;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
@@ -21,10 +24,10 @@ import org.sobadfish.warbridge.event.PlayerGameDeathEvent;
 import org.sobadfish.warbridge.player.message.ScoreBoardMessage;
 import org.sobadfish.warbridge.player.team.TeamInfo;
 import org.sobadfish.warbridge.room.GameRoom;
+import org.sobadfish.warbridge.tools.Utils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Sobadfish
@@ -57,6 +60,8 @@ public class PlayerInfo {
 
     private PlayerInfo damageByInfo = null;
 
+
+
     public PlayerInventory inventory;
 
     public PlayerEnderChestInventory eInventory;
@@ -72,6 +77,14 @@ public class PlayerInfo {
             put(3,new ItemBootsLeather());
         }
     };
+
+    public Position getPosition(){
+        return player.getPosition();
+    }
+
+    public Level getLevel(){
+        return player.getLevel();
+    }
 
     public PlayerInfo(EntityHuman player){
         this.player = player;
@@ -399,7 +412,26 @@ public class PlayerInfo {
 
             player.getInventory().setArmorItem(entry.getKey(), item);
         }
-        player.getInventory().addItem(new ItemSwordWood());
+        player.getInventory().addItem(new ItemSwordIron());
+        player.getInventory().addItem(new ItemBow());
+        ItemPickaxeDiamond diamond = new ItemPickaxeDiamond();
+        diamond.addEnchantment(Enchantment.getEnchantment(15).setLevel(2));
+        Item item = getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor();
+        item.setCount(128);
+        player.getInventory().addItem(item);
+        ItemAppleGold gold = new ItemAppleGold();
+        gold.setCount(8);
+        player.getInventory().addItem(gold);
+        player.getInventory().setItem(7,new ItemDiamond());
+        player.getInventory().setItem(8,new ItemArrow());
+
+
+
+        //TODO 给予玩家初始物品
+
+
+
+
         playerType = PlayerType.START;
 
     }
@@ -526,11 +558,49 @@ public class PlayerInfo {
     }
 
     private ArrayList<String> getLore(boolean isWait){
-        //TODO 构建Lore
+        ArrayList<String> lore = new ArrayList<>();
+        String levelName = WarBridgeMain.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
+        if(levelName == null){
+            levelName = " -- ";
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        lore.add("&7"+format.format(new Date()));
+        lore.add("游戏模式: &a"+levelName);
 
-       return  null;
+        lore.add(" ");
+        if(isWait){
+            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
+            lore.add("等待中....");
+            lore.add("   ");
+
+        }else{
+
+            lore.add("剩余时间: &a"+formatTime(getGameRoom().loadTime));
+
+            for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
+                String me = "";
+                if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
+                    me = "&7(我)";
+                }
+                lore.add("◎ "+ teamInfo +": &r  &c"+ Utils.getLine(5,Utils.getPercent(teamInfo.score,5),teamInfo.getTeamConfig().getNameColor()+"●","&7●") +me);
+            }
+            lore.add("      ");
+            lore.add("&b击杀数: &a"+killCount);
+            lore.add("&e助攻数: &a"+assists);
+
+            lore.add("        ");
+        }
+        Object obj = WarBridgeMain.getWarBridgeMain().getConfig().get("game-logo");
+        if(obj instanceof List){
+            for(Object s : (List<?>)obj){
+                lore.add(s.toString());
+            }
+        }else{
+            lore.add(WarBridgeMain.getWarBridgeMain().getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+        }
+        return lore;
     }
-    private int loadTime = 0;
+
 
     private boolean isSendkey = false;
 
@@ -540,6 +610,10 @@ public class PlayerInfo {
     public void onUpdate(){
 
         //TODO 玩家更新线程
+        if(gameRoom != null && gameRoom.gameStart > 1){
+            sendTitle(gameRoom.cause, 2);
+            sendSubTitle("&7将在&a"+gameRoom.gameStart+"&7秒后开始");
+        }
 
         try{
             Class.forName("de.theamychan.scoreboard.api.ScoreboardAPI");
@@ -587,7 +661,7 @@ public class PlayerInfo {
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             return;
         }
-        player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+//        player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
         deathCount++;
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -644,6 +718,8 @@ public class PlayerInfo {
         if(playerType == PlayerType.WATCH){
             getGameRoom().joinWatch(this);
         }
+        //重新复活
+        spawn();
 
     }
 

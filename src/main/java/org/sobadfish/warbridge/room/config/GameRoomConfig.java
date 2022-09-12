@@ -53,6 +53,11 @@ public class GameRoomConfig {
      * */
     private int maxPlayerSize;
 
+    /**
+     * 胜利积分
+    * */
+    private int score;
+
 
     //自动进入下一局
     public boolean isAutomaticNextRound;
@@ -131,6 +136,9 @@ public class GameRoomConfig {
     }
 
 
+    public void setTeamConfigs(ArrayList<TeamInfoConfig> teamConfigs) {
+        this.teamConfigs = teamConfigs;
+    }
 
     public ArrayList<TeamInfoConfig> getTeamConfigs() {
         return teamConfigs;
@@ -148,13 +156,38 @@ public class GameRoomConfig {
         return maxPlayerSize;
     }
 
+    public void setWorldInfo(WorldInfoConfig worldInfo) {
+        this.worldInfo = worldInfo;
+    }
+
     public WorldInfoConfig getWorldInfo() {
         return worldInfo;
+    }
+
+    public LinkedHashMap<String, TeamConfig> getTeamCfg() {
+        return teamCfg;
     }
 
     public void setTeamCfg(LinkedHashMap<String, TeamConfig> teamCfg) {
         this.teamCfg = teamCfg;
     }
+
+
+
+    public boolean notHasFloatText(String name){
+        for(FloatTextInfoConfig config: floatTextInfoConfigs){
+            if(config.name.equalsIgnoreCase(name)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void removeFloatText(String name){
+        floatTextInfoConfigs.removeIf(config -> config.name.equalsIgnoreCase(name));
+    }
+
+
 
     public static GameRoomConfig getGameRoomConfigByFile(String name, File file) {
         //TODO 构建房间配置逻辑
@@ -191,6 +224,7 @@ public class GameRoomConfig {
                 }
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,teamInfoConfigs);
                 roomConfig.hasWatch = room.getBoolean("hasWatch",true);
+                roomConfig.score = room.getInt("score",5);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));

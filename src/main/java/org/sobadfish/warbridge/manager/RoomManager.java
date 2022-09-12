@@ -3,6 +3,7 @@ package org.sobadfish.warbridge.manager;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBed;
 import cn.nukkit.block.BlockCraftingTable;
 import cn.nukkit.entity.Entity;
@@ -10,6 +11,7 @@ import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.item.EntityPrimedTNT;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
@@ -27,6 +29,7 @@ import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.WarBridgeMain;
@@ -255,6 +258,64 @@ public class RoomManager implements Listener {
         }
         return new RoomManager(map);
     }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event){
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
+        PlayerInfo info = getPlayerInfo(player);
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room.getWorldInfo().getConfig().getGameWorld() == event.getBlock().level){
+                if(room.getType() == GameType.WAIT){
+                    event.setCancelled();
+                }else{
+                    if(info.isWatch()){
+                        info.sendMessage("&c你处于旁观状态");
+                        event.setCancelled();
+                        return;
+                    }
+                    if(!room.getCanBreak().contains(block.toItem())){
+                        info.sendMessage("&c你不能破坏这个方块");
+                        event.setCancelled();
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event){
+        Player player = event.getPlayer();
+        PlayerInfo info = getPlayerInfo(player);
+        if(info != null && info.getTeamInfo() != null){
+            TeamInfo teamInfo = info.getTeamInfo();
+            GameRoom room = info.getGameRoom();
+            if(room != null && room.getType() == GameType.START){
+                if(room.gameStart > 0){
+                    if(player.getFloorX() != event.getTo().getFloorX() && player.getFloorZ() != event.getTo().getFloorZ()){
+                        event.setCancelled();
+                    }
+                }
+                if(info.isWatch()){
+                    return;
+                }
+                Position position;
+                for(TeamInfo teamInfo1: room.getTeamInfos()){
+                    position = teamInfo1.getTeamConfig().getScorePosition();
+                    if(Utils.inArea(player,position)){
+                        if(teamInfo1.equals(teamInfo)){
+                            info.spawn();
+                        }else{
+                            room.addScore(info);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     /*
      * ***********************************************
      *

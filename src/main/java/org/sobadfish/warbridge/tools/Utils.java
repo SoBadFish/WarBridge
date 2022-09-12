@@ -80,6 +80,60 @@ public class Utils {
         return explodePlayer;
     }
 
+    /**
+     * 获取百分比
+     * */
+    public static double getPercent(int n,int max){
+        double r = 0;
+        if(n > 0){
+            r = (double) n / (double) max;
+        }
+        return r;
+    }
+
+    /**
+     * 绘制颜色条
+     * @param size 长度
+     * @param percent 百分比
+     * @param hasColor 颜色块
+     * @param noColor 没有颜色的块
+     *
+     * @return 颜色条
+     * */
+    public static String getLine(int size,double percent,String hasColor,String noColor){
+        int l = (int) (size * percent);
+        int other = size - l;
+        StringBuilder ls = new StringBuilder();
+        if(l > 0){
+            for(int i = 0;i < l;i++){
+                ls.append(hasColor);
+            }
+        }
+        StringBuilder others = new StringBuilder();
+        if(other > 0){
+            for(int i = 0;i < other;i++){
+                others.append(noColor);
+            }
+        }
+        return ls +others.toString();
+    }
+
+    public static boolean inArea(Position player,Position location){
+        Position n1 = new Position(location.getX() -1,location.getY(),location.getZ() - 1,location.level);
+        Position n2 = new Position(location.getX() +1,location.getY(),location.getZ() + 1,location.level);
+        if(player.level == location.level) {
+            if (player.x >= Math.min(n1.getX(), n2.getX())
+                    && player.x <= Math.max(n1.getX(), n2.getX())
+                    && player.z >= Math.min(n1.getZ(), n2.getZ())
+                    && player.z <= Math.max(n1.getZ(), n2.getZ())
+            ) {
+                return player.y <= location.y;
+
+            }
+        }
+        return false;
+    }
+
 
     public static void toDelete(File file) {
         File[] files = file.listFiles();

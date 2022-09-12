@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
@@ -26,10 +27,12 @@ import org.sobadfish.warbridge.room.config.GameRoomConfig;
 import org.sobadfish.warbridge.room.floattext.FloatTextInfo;
 import org.sobadfish.warbridge.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.warbridge.room.world.WorldInfo;
+import org.sobadfish.warbridge.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -45,9 +48,13 @@ public class GameRoom {
 
     private boolean isMax;
 
+    public String cause = " ";
+
     private boolean teamAll;
 
     private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
+
+    private List<Item> canBreak = new ArrayList<>();
 
     //房间内的玩家
     private final CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
@@ -91,6 +98,7 @@ public class GameRoom {
     }
 
     public CopyOnWriteArrayList<PlayerInfo> getPlayerInfos() {
+        playerInfos.removeIf((p)->p.disable);
         return playerInfos;
     }
 
@@ -527,6 +535,23 @@ public class GameRoom {
     }
 
     private void onEnd() {
+        if(loadTime == -1){
+            loadTime = 10;
+        }
+
+        for(PlayerInfo playerInfo:getLivePlayers()){
+            Utils.spawnFirework(playerInfo.getPosition());
+        }
+
+        if(loadTime == 0){
+            type = GameType.CLOSE;
+
+        }
+
+    }
+
+    public List<Item> getCanBreak() {
+        return canBreak;
     }
 
     private void onStart() {
@@ -539,9 +564,14 @@ public class GameRoom {
                 }
             }
             //TODO 当房间开始
+            for(TeamInfo teamInfo: teamInfos){
+                Item i = teamInfo.getTeamConfig().getTeamConfig().getBlockWoolColor();
+                if(!canBreak.contains(i)){
+                    canBreak.add(i);
+                }
+            }
 
             for(PlayerInfo i : getPlayerInfos()){
-//                    i.clear();
                 try {
                     i.spawn();
                 }catch (Exception e){
@@ -569,14 +599,14 @@ public class GameRoom {
 
             for (TeamInfo teamInfo : teamInfos) {
                 teamInfo.onUpdate();
+                if(teamInfo.score == 5){
+                    teamInfo.echoVictory();
+                    type = GameType.END;
+                    worldInfo.setClose(true);
+                    loadTime = 5;
+                }
             }
-            if (getLiveTeam().size() == 1) {
-                TeamInfo teamInfo = getLiveTeam().get(0);
-                teamInfo.echoVictory();
-                type = GameType.END;
-                worldInfo.setClose(true);
-                loadTime = 5;
-            }
+
         }else{
             TeamInfo successInfo = null;
             ArrayList<TeamInfo> teamInfos = getLiveTeam();
@@ -722,10 +752,20 @@ public class GameRoom {
         if(teamInfo != null){
             teamInfo.score += 1;
             //TODO 当队伍获得分数
+            gameStart = 5;
+            cause = playerInfo+"获得一分";
 
+
+            StringBuilder s1 = new StringBuilder();
+            for(TeamInfo teamInfo1: teamInfos){
+                s1.append(teamInfo1.getTeamConfig().getNameColor()).append(teamInfo1.score).append("&7").append(":");
+
+            }
+            sendSubTitle(s1.substring(0,s1.length()-1));
+            for(PlayerInfo playerInfo1: getLivePlayers()){
+                playerInfo1.spawn();
+            }
         }
     }
-
-
 
 }

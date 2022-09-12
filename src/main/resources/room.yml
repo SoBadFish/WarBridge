@@ -2,6 +2,7 @@ world: ""
 gameTime: 1200
 callbackY: 17
 hasWatch: true
+socre: 5
 waitTime: 120
 max-player-waitTime: 20
 minPlayerSize: 4

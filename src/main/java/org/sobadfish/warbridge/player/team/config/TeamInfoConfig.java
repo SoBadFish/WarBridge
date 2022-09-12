@@ -39,6 +39,8 @@ public class TeamInfoConfig {
     }
 
 
+
+
     public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map<?,?> map){
 
         return new TeamInfoConfig(teamConfig,map.get("position").toString(),map.get("score").toString());
