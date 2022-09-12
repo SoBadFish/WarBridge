@@ -614,6 +614,13 @@ public class GameRoom {
                     loadTime = 5;
                 }
             }
+            if (getLiveTeam().size() == 1) {
+                TeamInfo teamInfo = getLiveTeam().get(0);
+                teamInfo.echoVictory();
+                type = GameType.END;
+                worldInfo.setClose(true);
+                loadTime = 5;
+            }
 
         }else{
             TeamInfo successInfo = null;
