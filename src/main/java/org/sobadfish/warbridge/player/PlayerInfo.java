@@ -581,7 +581,7 @@ public class PlayerInfo {
         }else{
 
             lore.add("剩余时间: &a"+formatTime(getGameRoom().loadTime));
-
+            lore.add("    ");
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                 String me = "";
                 if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
@@ -589,11 +589,11 @@ public class PlayerInfo {
                 }
                 lore.add("◎ "+ teamInfo +": &r  &c"+ Utils.getLine(5,Utils.getPercent(teamInfo.score,5),teamInfo.getTeamConfig().getNameColor()+"●","&7●") +me);
             }
-            lore.add("      ");
+            lore.add("       ");
             lore.add("&b击杀数: &a"+killCount);
             lore.add("&e助攻数: &a"+assists);
 
-            lore.add("        ");
+            lore.add("         ");
         }
         Object obj = WarBridgeMain.getWarBridgeMain().getConfig().get("game-logo");
         if(obj instanceof List){
