@@ -447,6 +447,9 @@ public class PlayerInfo {
      * */
     public void cancel(){
         leave();
+        if (player.isImmobile()) {
+            player.setImmobile(false);
+        }
 
         cancel = true;
         disable = true;
@@ -615,6 +618,11 @@ public class PlayerInfo {
 
         //TODO 玩家更新线程
         if(gameRoom != null && gameRoom.gameStart > 0){
+            if(teamInfo != null){
+                if(teamInfo.score == 5){
+                    return;
+                }
+            }
             player.setImmobile(true);
             sendTitle(gameRoom.cause, 2);
             sendSubTitle("&7将在&a"+gameRoom.gameStart+"&7秒后开始");
