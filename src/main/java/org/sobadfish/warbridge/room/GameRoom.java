@@ -618,19 +618,20 @@ public class GameRoom {
         }else{
             TeamInfo successInfo = null;
             ArrayList<TeamInfo> teamInfos = getLiveTeam();
+            int score = 0;
             if(teamInfos.size() > 0) {
-                int pl = 0;
                 for (TeamInfo info : teamInfos) {
-                    if (pl == 0) {
-                        pl++;
+                    if(info.score > score){
                         successInfo = info;
-                        continue;
                     }
-
                     info.onUpdate();
                     info.setStop(true);
 
                 }
+                if(successInfo == null){
+                    successInfo = teamInfos.get(0);
+                }
+
                 successInfo.echoVictory();
 
             }
@@ -755,9 +756,24 @@ public class GameRoom {
 
     }
 
+
+    private Long lastTime = 0L;
+    //3秒内不加分
     public void addScore(PlayerInfo playerInfo){
         TeamInfo teamInfo = playerInfo.getTeamInfo();
+        if(lastTime == 0){
+            lastTime = System.currentTimeMillis();
+        }
+        if(System.currentTimeMillis() - lastTime < 2000){
+            return;
+        }
+        for(TeamInfo t: getTeamInfos()){
+            if(t.hasScore){
+                return;
+            }
+        }
         if(teamInfo != null){
+            teamInfo.hasScore = true;
             teamInfo.score += 1;
             //TODO 当队伍获得分数
             gameStart = 5;

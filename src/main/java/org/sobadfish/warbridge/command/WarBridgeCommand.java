@@ -17,8 +17,6 @@ import org.sobadfish.warbridge.room.GameRoom;
 import org.sobadfish.warbridge.room.WorldRoom;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
 
-import java.util.LinkedHashMap;
-
 /**
  * @author SoBadFish
  * 2022/1/12
@@ -29,7 +27,6 @@ public class WarBridgeCommand extends Command {
         super(name,"战桥游戏房间");
     }
 
-    public static LinkedHashMap<String, GameFrom> FROM = new LinkedHashMap<>();
 
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] strings) {
@@ -65,7 +62,7 @@ public class WarBridgeCommand extends Command {
                     });
                 }
                 simple.disPlay((Player) commandSender);
-                FROM.put(commandSender.getName(), simple);
+                DisPlayWindowsFrom.FROM.put(commandSender.getName(), simple);
             }else{
                 PlayerInfo playerInfo = new PlayerInfo((Player) commandSender);
                 PlayerInfo info = WarBridgeMain.getRoomManager().getPlayerInfo((Player) commandSender);
@@ -129,7 +126,7 @@ public class WarBridgeCommand extends Command {
         return true;
     }
     private void disPlayRoomsFrom(Player player, String name){
-        FROM.remove(player.getName());
+        DisPlayWindowsFrom.FROM.remove(player.getName());
         GameFrom simple = new GameFrom(WarBridgeMain.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));
         WorldRoom worldRoom = WarBridgeMain.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
@@ -167,13 +164,13 @@ public class WarBridgeCommand extends Command {
                         playerInfo.sendForceMessage("&a你已加入 "+roomConfig.getName()+" 房间");
                     }
 //                    if (BedWarMain.getRoomManager().hasRoom(roomConfig.name)) {
-                    FROM.remove(player.getName());
+                    DisPlayWindowsFrom.FROM.remove(player.getName());
 
                 }
             });
         }
         simple.disPlay(player);
-        FROM.put(player.getName(),simple);
+        DisPlayWindowsFrom.FROM.put(player.getName(),simple);
     }
 
 

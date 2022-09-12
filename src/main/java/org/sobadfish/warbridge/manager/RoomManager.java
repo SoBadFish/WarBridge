@@ -275,7 +275,7 @@ public class RoomManager implements Listener {
                         event.setCancelled();
                         return;
                     }
-                    if(!room.getCanBreak().contains(block.toItem())){
+                    if(!canBreak(room,event.getBlock())){
                         info.sendMessage("&c你不能破坏这个方块");
                         event.setCancelled();
                     }
@@ -283,6 +283,16 @@ public class RoomManager implements Listener {
             }
         }
     }
+
+    private boolean canBreak(GameRoom room, Block block){
+        for(Item item: room.getCanBreak()){
+            if(item.equals(block.toItem(),true,true)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @EventHandler
     public void onMove(PlayerMoveEvent event){
@@ -605,7 +615,7 @@ public class RoomManager implements Listener {
                     new ElementButtonImageData("path",
                             ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
         }
-        player.showFormWindow(simple,102);
+        player.showFormWindow(simple,1002);
         TeamChoseItem.clickAgain.remove(player);
     }
 
@@ -721,7 +731,7 @@ public class RoomManager implements Listener {
             }
 
         }
-        int fromId = 102;
+        int fromId = 1002;
         if(event.getFormID() == fromId && event.getResponse() instanceof FormResponseSimple){
             PlayerInfo info = WarBridgeMain.getRoomManager().getPlayerInfo(player);
             if(info != null){

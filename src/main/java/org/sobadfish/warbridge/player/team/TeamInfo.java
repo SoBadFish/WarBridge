@@ -25,7 +25,10 @@ public class TeamInfo {
     //积分
     public int score = 0;
 
-    //淘汰
+    //获得分数
+    public boolean hasScore;
+
+    public int loadTime = 0;
 
     private boolean stop;
 
@@ -164,6 +167,14 @@ public class TeamInfo {
         if(stop){
             close = true;
         }
+        if(hasScore){
+            loadTime++;
+            if(loadTime == 3){
+                loadTime = 0;
+                hasScore = false;
+            }
+        }
+
 
     }
 
