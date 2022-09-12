@@ -53,6 +53,8 @@ public class GameRoom {
 
     private boolean teamAll;
 
+    public boolean isTeleport = true;
+
     private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
 
     private List<Item> canBreak = new ArrayList<>();
@@ -594,8 +596,10 @@ public class GameRoom {
                     }
                 }
             }
+            isTeleport = false;
             sendTitle("&c游戏开始");
             gameStart = 5;
+            resetStart = true;
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             GameRoomStartEvent event = new GameRoomStartEvent(this,WarBridgeMain.getWarBridgeMain());
@@ -606,7 +610,6 @@ public class GameRoom {
             gameStart--;
         }else if(resetStart){
             //移除产生的方块
-
             resetStart = false;
         }
         if(loadTime > 0) {
@@ -788,6 +791,7 @@ public class GameRoom {
         }
         if(teamInfo != null){
             teamInfo.hasScore = true;
+            isTeleport = true;
             teamInfo.score += 1;
             //TODO 当队伍获得分数
             gameStart = 5;
@@ -804,6 +808,7 @@ public class GameRoom {
             for(PlayerInfo playerInfo1: getLivePlayers()){
                 playerInfo1.spawn();
             }
+            isTeleport = false;
         }
     }
 

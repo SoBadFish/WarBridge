@@ -615,10 +615,14 @@ public class PlayerInfo {
 
         //TODO 玩家更新线程
         if(gameRoom != null && gameRoom.gameStart > 0){
+            player.setImmobile(true);
             sendTitle(gameRoom.cause, 2);
             sendSubTitle("&7将在&a"+gameRoom.gameStart+"&7秒后开始");
+        }else {
+            if (player.isImmobile()) {
+                player.setImmobile(false);
+            }
         }
-
         if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
             player.setNameTag(TextFormat.colorize('&',teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())));

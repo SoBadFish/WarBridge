@@ -324,12 +324,6 @@ public class RoomManager implements Listener {
 
                 }
 
-                if(room.resetStart){
-                    if(event.getFrom().getFloorX() != event.getTo().getFloorX() || event.getFrom().getFloorZ() != event.getTo().getFloorZ()){
-                        event.setCancelled();
-
-                    }
-                }
 
             }
         }
