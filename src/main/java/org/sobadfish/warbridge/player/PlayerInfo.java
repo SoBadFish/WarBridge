@@ -618,6 +618,38 @@ public class PlayerInfo {
             sendTitle(gameRoom.cause, 2);
             sendSubTitle("&7将在&a"+gameRoom.gameStart+"&7秒后开始");
         }
+        if(gameRoom != null){
+            Position position;
+            for(TeamInfo teamInfo1: gameRoom.getTeamInfos()){
+                position = teamInfo1.getTeamConfig().getScorePosition();
+                if(Utils.inArea(player,position,true)){
+                    if(teamInfo1.equals(teamInfo)){
+                        this.spawn();
+                    }else{
+                        gameRoom.addScore(this);
+                    }
+                }
+
+            }
+        }
+        if(playerType == PlayerType.START){
+            //TODO 游戏开始后 可以弄一些buff
+            player.setNameTag(TextFormat.colorize('&',teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())));
+
+
+        }else if(playerType == PlayerType.WAIT){
+            if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition().getY() - player.getY() > getGameRoom().getRoomConfig().callbackY){
+                if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition() == null){
+                    if(getGameRoom() != null){
+                        getGameRoom().quitPlayerInfo(this,true);
+                        sendMessage("&c房间出现了错误 （未识别到等待大厅）已将你送回出生点");
+                    }
+                    return;
+                }
+                player.teleport(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition());
+            }
+        }
+
 
         try{
             Class.forName("de.theamychan.scoreboard.api.ScoreboardAPI");
