@@ -794,17 +794,25 @@ public class GameRoom {
             isTeleport = true;
             teamInfo.score += 1;
             //TODO 当队伍获得分数
-            gameStart = 5;
-            resetStart = true;
-            cause = playerInfo+"获得一分";
+            if(teamInfo.score != 5){
+                gameStart = 5;
+                resetStart = true;
+                cause = playerInfo+"得分!";
 
 
-            StringBuilder s1 = new StringBuilder();
-            for(TeamInfo teamInfo1: teamInfos){
-                s1.append(teamInfo1.getTeamConfig().getNameColor()).append(teamInfo1.score).append("&7").append(":");
+                StringBuilder s1 = new StringBuilder();
+                for(TeamInfo teamInfo1: teamInfos){
+                    s1.append(teamInfo1.getTeamConfig().getNameColor()).append(teamInfo1.score).append("&7").append(" - ");
 
+                }
+                sendMessage(Utils.writeLine(19,"&6●"));
+                sendMessage("");
+                sendMessage(Utils.getCentontString(playerInfo+"&e得分！",19));
+                sendMessage(Utils.getCentontString(s1.toString(),19));
+                sendMessage("");
+                sendMessage(Utils.writeLine(19,"&6●"));
             }
-            sendSubTitle(s1.substring(0,s1.length()-1));
+
             for(PlayerInfo playerInfo1: getLivePlayers()){
                 playerInfo1.spawn();
             }

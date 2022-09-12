@@ -110,6 +110,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                             if (WorldInfoConfig.toPathWorld(map.getKey().getName(), map.getValue())) {
                                 WarBridgeMain.sendMessageToConsole("&a" + map.getKey().getName() + " 地图已还原");
                             }
+
                             Server.getInstance().loadLevel(map.getValue());
                             WarBridgeMain.sendMessageToConsole("&r释放房间 " + map.getKey().getName());
                             WarBridgeMain.sendMessageToConsole("&r房间 " + map.getKey().getName() + " 已回收");

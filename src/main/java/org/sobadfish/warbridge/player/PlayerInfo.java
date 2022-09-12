@@ -530,17 +530,6 @@ public class PlayerInfo {
 
     private int spawnTime = 0;
 
-    public static String formatTime(int s){
-        int min = s / 60;
-        int ss = s % 60;
-
-        if(min > 0){
-            return min+" 分 "+ss+" 秒";
-        }else{
-            return ss+" 秒";
-        }
-
-    }
 
 
 
@@ -582,7 +571,7 @@ public class PlayerInfo {
 
         }else{
 
-            lore.add("剩余时间: &a"+formatTime(getGameRoom().loadTime));
+            lore.add("剩余时间: &a"+formatTime1(getGameRoom().loadTime));
             lore.add("    ");
             for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                 String me = "";
@@ -623,11 +612,15 @@ public class PlayerInfo {
                     return;
                 }
             }
-            player.setImmobile(true);
+            if(!player.isImmobile()) {
+                player.setImmobile(true);
+            }
             sendTitle(gameRoom.cause, 2);
             sendSubTitle("&7将在&a"+gameRoom.gameStart+"&7秒后开始");
         }else {
             if (player.isImmobile()) {
+                sendTitle(" ", 2);
+                sendSubTitle("&a开战！");
                 player.setImmobile(false);
             }
         }
