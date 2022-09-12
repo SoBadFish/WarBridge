@@ -90,6 +90,10 @@ public class PlayerInfo {
         this.player = player;
     }
 
+    public int getAssists() {
+        return assists;
+    }
+
     public EntityHuman getPlayer() {
         return player;
     }
@@ -416,6 +420,7 @@ public class PlayerInfo {
         player.getInventory().addItem(new ItemBow());
         ItemPickaxeDiamond diamond = new ItemPickaxeDiamond();
         diamond.addEnchantment(Enchantment.getEnchantment(15).setLevel(2));
+        player.getInventory().addItem(diamond);
         Item item = getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor();
         item.setCount(128);
         player.getInventory().addItem(item);

@@ -118,7 +118,7 @@ public class Utils {
         return ls +others.toString();
     }
 
-    public static boolean inArea(Position player,Position location){
+    public static boolean inArea(Position player,Position location,boolean y){
         Position n1 = new Position(location.getX() -1,location.getY(),location.getZ() - 1,location.level);
         Position n2 = new Position(location.getX() +1,location.getY(),location.getZ() + 1,location.level);
         if(player.level == location.level) {
@@ -127,7 +127,9 @@ public class Utils {
                     && player.z >= Math.min(n1.getZ(), n2.getZ())
                     && player.z <= Math.max(n1.getZ(), n2.getZ())
             ) {
-                return player.y <= location.y;
+                if(y) {
+                    return player.y <= location.y;
+                }
 
             }
         }
