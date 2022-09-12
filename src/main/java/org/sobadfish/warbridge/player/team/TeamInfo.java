@@ -166,7 +166,7 @@ public class TeamInfo {
         }
 
     }
-   
+
 
     public boolean join(PlayerInfo info){
         PlayerChoseTeamEvent event = new PlayerChoseTeamEvent(info,this,room, WarBridgeMain.getWarBridgeMain());

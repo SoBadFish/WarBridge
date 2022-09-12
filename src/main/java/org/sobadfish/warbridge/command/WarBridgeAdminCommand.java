@@ -169,7 +169,7 @@ public class WarBridgeAdminCommand extends Command {
                 break;
             case "reload":
                 WarBridgeMain.sendMessageToObject("正在读取配置文件中",commandSender);
-                WarBridgeMain.getWarBridgeMain().loadBedWarConfig();
+                WarBridgeMain.getWarBridgeMain().loadConfig();
                 WarBridgeMain.sendMessageToObject("配置文件读取完成",commandSender);
                 break;
             case "close":

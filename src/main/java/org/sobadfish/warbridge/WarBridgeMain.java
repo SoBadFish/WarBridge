@@ -3,6 +3,9 @@ package org.sobadfish.warbridge;
 import cn.nukkit.Player;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.warbridge.command.WarBridgeAdminCommand;
+import org.sobadfish.warbridge.command.WarBridgeCommand;
+import org.sobadfish.warbridge.command.WarBridgeSpeakCommand;
 import org.sobadfish.warbridge.manager.MenuRoomManager;
 import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.ThreadManager;
@@ -45,7 +48,10 @@ public class WarBridgeMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
         this.getLogger().info(TextFormat.colorize('&',"&a战桥插件加载完成，祝您使用愉快"));
 
-        loadBedWarConfig();
+        loadConfig();
+        this.getServer().getCommandMap().register("warbridge",new WarBridgeAdminCommand("wba"));
+        this.getServer().getCommandMap().register("warbridge",new WarBridgeCommand("wb"));
+        this.getServer().getCommandMap().register("warbridge",new WarBridgeSpeakCommand("wbs"));
         ThreadManager.init();
         this.getLogger().info(TextFormat.colorize('&',"&a战桥插件加载完成，祝您使用愉快"));
     }
@@ -79,7 +85,7 @@ public class WarBridgeMain extends PluginBase {
     /**
      * 加载配置文件
      */
-    public void loadBedWarConfig(){
+    public void loadConfig(){
         saveDefaultConfig();
         reloadConfig();
         File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
