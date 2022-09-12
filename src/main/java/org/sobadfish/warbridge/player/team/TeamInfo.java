@@ -1,13 +1,12 @@
 package org.sobadfish.warbridge.player.team;
 
 import cn.nukkit.Server;
-import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockAir;
-import cn.nukkit.block.BlockBed;
-import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
-import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.warbridge.WarBridgeMain;
+import org.sobadfish.warbridge.event.PlayerChoseTeamEvent;
+import org.sobadfish.warbridge.event.TeamDefeatEvent;
+import org.sobadfish.warbridge.event.TeamVictoryEvent;
 import org.sobadfish.warbridge.player.PlayerInfo;
 import org.sobadfish.warbridge.player.team.config.TeamInfoConfig;
 import org.sobadfish.warbridge.room.GameRoom;
@@ -85,14 +84,7 @@ public class TeamInfo {
                 playerInfo.sendForceMessage(msg));
     }
 
-    public void addEffect(TeamEffectInfo effect){
-        if(teamEffects.contains(effect)){
-            TeamEffectInfo ee = teamEffects.get(teamEffects.indexOf(effect));
-            ee.setLevel(ee.getLevel() + 1);
-        }else{
-            teamEffects.add(effect);
-        }
-    }
+
 
 
 
@@ -125,14 +117,14 @@ public class TeamInfo {
 
     public void echoVictory(){
         //TODO 当队伍胜利
-        TeamVictoryEvent event = new TeamVictoryEvent(this,room,BedWarMain.getBedWarMain());
+        TeamVictoryEvent event = new TeamVictoryEvent(this,room, WarBridgeMain.getWarBridgeMain());
         Server.getInstance().getPluginManager().callEvent(event);
 
     }
 
     public void echoDefeat(){
         //TODO 当队伍失败
-        TeamDefeatEvent event = new TeamDefeatEvent(this,room,BedWarMain.getBedWarMain());
+        TeamDefeatEvent event = new TeamDefeatEvent(this,room,WarBridgeMain.getWarBridgeMain());
         Server.getInstance().getPluginManager().callEvent(event);
 
     }
@@ -172,20 +164,11 @@ public class TeamInfo {
             return;
         }
         if(stop){
-            setBadExists(false);
-            breakBed();
-            for(PlayerInfo info: getLivePlayer()){
-                if(info.getGameRoom().getType() != GameRoom.GameType.END){
-                    info.death(null);
-                }
-
-            }
             close = true;
             return;
         }
         int d = 0;
         for(PlayerInfo info: getTeamPlayers()){
-            info.putEffect(teamEffects);
             if(info.getPlayerType() == PlayerInfo.PlayerType.WATCH || info.getPlayerType() == PlayerInfo.PlayerType.LEAVE){
                 d++;
             }
@@ -204,7 +187,7 @@ public class TeamInfo {
    
 
     public boolean join(PlayerInfo info){
-        PlayerChoseTeamEvent event = new PlayerChoseTeamEvent(info,this,room, BedWarMain.getBedWarMain());
+        PlayerChoseTeamEvent event = new PlayerChoseTeamEvent(info,this,room, WarBridgeMain.getWarBridgeMain());
         Server.getInstance().getPluginManager().callEvent(event);
         if(teamPlayers.contains(info)){
             return false;

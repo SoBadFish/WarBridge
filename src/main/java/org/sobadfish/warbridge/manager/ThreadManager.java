@@ -3,6 +3,9 @@ package org.sobadfish.warbridge.manager;
 
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.room.GameRoom;
+import org.sobadfish.warbridge.thread.PluginMasterRunnable;
+import org.sobadfish.warbridge.thread.RandomJoinRunnable;
+import org.sobadfish.warbridge.thread.RoomLoadRunnable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -110,6 +113,10 @@ public class ThreadManager {
     public static void init() {
         ThreadManager.schedule(new RunnableCheck());
         //TODO 线程
+        ThreadManager.schedule(new RunnableCheck());
+        ThreadManager.schedule(new PluginMasterRunnable(),1);
+        ThreadManager.schedule(new RoomLoadRunnable());
+        ThreadManager.schedule(new RandomJoinRunnable());
 
     }
 

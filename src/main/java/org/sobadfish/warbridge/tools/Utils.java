@@ -80,14 +80,6 @@ public class Utils {
         return explodePlayer;
     }
 
-    public static WarBridgeMain.UiType loadUiTypeByName(String name) {
-        WarBridgeMain.UiType type = WarBridgeMain.UiType.AUTO;
-
-        try{
-          type = WarBridgeMain.UiType.valueOf(name.toUpperCase());
-        }catch (Exception ignore){}
-        return type;
-    }
 
     public static void toDelete(File file) {
         File[] files = file.listFiles();

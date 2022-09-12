@@ -1,7 +1,9 @@
 package org.sobadfish.warbridge.player.team.config;
 
+import cn.nukkit.level.Position;
 import cn.nukkit.utils.BlockColor;
 import lombok.Data;
+import org.sobadfish.warbridge.room.config.WorldInfoConfig;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,7 +17,6 @@ import java.util.Map;
 public class TeamInfoConfig {
 
     private TeamConfig teamConfig;
-
 
 
     /**
@@ -33,13 +34,14 @@ public class TeamInfoConfig {
 
 
     public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map<?,?> map){
-//        Position bedPosition = WorldInfoConfig.getPositionByString();
-//        Position spawnPosition = WorldInfoConfig.getPositionByString(.toString());
 
         return new TeamInfoConfig(teamConfig,map.get("position").toString());
     }
 
 
+    public Position getSpawnPosition() {
+        return WorldInfoConfig.getPositionByString(spawnPosition);
+    }
 
     public String getName(){
         return teamConfig.getName();

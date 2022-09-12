@@ -3,8 +3,12 @@ package org.sobadfish.warbridge;
 import cn.nukkit.Player;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.warbridge.manager.MenuRoomManager;
 import org.sobadfish.warbridge.manager.RoomManager;
+import org.sobadfish.warbridge.manager.ThreadManager;
 import org.sobadfish.warbridge.panel.lib.AbstractFakeInventory;
+
+import java.io.File;
 
 /**
  *  __      __        ___     _    _
@@ -20,7 +24,10 @@ public class WarBridgeMain extends PluginBase {
 
     public static WarBridgeMain warBridgeMain;
 
+
     private static RoomManager roomManager;
+
+    private static MenuRoomManager menuRoomManager;
 
     @Override
     public void onEnable() {
@@ -37,6 +44,9 @@ public class WarBridgeMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
         this.getLogger().info(TextFormat.colorize('&',"&a战桥插件加载完成，祝您使用愉快"));
 
+        loadBedWarConfig();
+        ThreadManager.init();
+        this.getLogger().info(TextFormat.colorize('&',"&a战桥插件加载完成，祝您使用愉快"));
     }
 
     public static void sendMessageToConsole(String msg){
@@ -65,8 +75,43 @@ public class WarBridgeMain extends PluginBase {
 
     }
 
+    /**
+     * 加载配置文件
+     */
+    public void loadBedWarConfig(){
+        saveDefaultConfig();
+        reloadConfig();
+        File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
+        if(!mainFileDir.exists()){
+            if(!mainFileDir.mkdirs()){
+                sendMessageToConsole("&c创建文件夹 rooms失败");
+            }
+        }
 
-    public static void sendMessageToObject(String msg,Object o){
+        roomManager = RoomManager.initGameRoomConfig(mainFileDir);
+        sendMessageToConsole("&a房间数据全部加载完成");
+        this.getServer().getPluginManager().registerEvents(roomManager,this);
+        if(getConfig().getAll().size() == 0) {
+            this.saveResource("config.yml", true);
+            reloadConfig();
+        }
+        menuRoomManager = new MenuRoomManager(getConfig());
+
+    }
+
+    public static RoomManager getRoomManager() {
+        return roomManager;
+    }
+
+    public static MenuRoomManager getMenuRoomManager() {
+        return menuRoomManager;
+    }
+
+    public static WarBridgeMain getWarBridgeMain() {
+        return warBridgeMain;
+    }
+
+    public static void sendMessageToObject(String msg, Object o){
         String message = TextFormat.colorize('&',getTitle()+" &b>>&r "+msg);
         sendTipMessageToObject(message,o);
     }
@@ -128,14 +173,14 @@ public class WarBridgeMain extends PluginBase {
         }
     }
 
-    public enum UiType{
-        /**
-         * auto: 自动
-         *
-         * packet: GUI界面
-         *
-         * ui: 箱子界面
-         * */
-        AUTO,PACKET,UI
-    }
+//    public enum UiType{
+//        /**
+//         * auto: 自动
+//         *
+//         * packet: GUI界面
+//         *
+//         * ui: 箱子界面
+//         * */
+//        AUTO,PACKET,UI
+//    }
 }
