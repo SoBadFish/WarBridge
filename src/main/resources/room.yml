@@ -1,0 +1,28 @@
+world: ""
+gameTime: 1200
+callbackY: 17
+hasWatch: true
+waitTime: 120
+max-player-waitTime: 20
+minPlayerSize: 4
+maxPlayerSize: 16
+teamSpawn: {}
+waitPosition: ""
+ban-command: []
+QuitRoom: []
+AutomaticNextRound: true
+victoryCmd: []
+defeatCmd: []
+
+floatSpawnPos: []
+
+roomStartMessage:
+  - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+  - "&f战桥"
+  - "&e"
+  - "&e达到对面的据点就可以获得1分"
+  - "&e率先得到5分的队伍获胜"
+  - "&e"
+  - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+
+

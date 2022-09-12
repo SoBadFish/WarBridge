@@ -22,7 +22,8 @@ public class TeamInfo {
 
     private TeamInfoConfig teamConfig;
 
-    private boolean badExists = true;
+    //积分
+    public int score = 0;
 
     //淘汰
 
@@ -53,9 +54,6 @@ public class TeamInfo {
         this.close = close;
     }
 
-    public void setBadExists(boolean badExists) {
-        this.badExists = badExists;
-    }
 
 
     public void setStop(boolean stop) {
@@ -165,22 +163,6 @@ public class TeamInfo {
         }
         if(stop){
             close = true;
-            return;
-        }
-        int d = 0;
-        for(PlayerInfo info: getTeamPlayers()){
-            if(info.getPlayerType() == PlayerInfo.PlayerType.WATCH || info.getPlayerType() == PlayerInfo.PlayerType.LEAVE){
-                d++;
-            }
-        }
-
-
-
-        if(d == getTeamPlayers().size()){
-            //被淘汰了
-            room.sendMessage("&r团灭 > "+toString()+"&c已被淘汰!");
-            echoDefeat();
-            stop = true;
         }
 
     }

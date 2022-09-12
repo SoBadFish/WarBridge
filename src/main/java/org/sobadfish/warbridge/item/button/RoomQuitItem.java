@@ -1,10 +1,11 @@
-package org.sobadfish.warbridge.item;
+package org.sobadfish.warbridge.item.button;
 
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.warbridge.WarBridgeMain;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class RoomQuitItem {
         Item item = Item.get(324);
         item.addEnchantment(Enchantment.get(9));
         CompoundTag tag = item.getNamedTag();
-        tag.putString("WarBridge","quitItem");
+        tag.putString(WarBridgeMain.GAME_NAME,"quitItem");
         item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',"&r&l&e点我退出游戏"));
         return item;

@@ -1,7 +1,7 @@
 package org.sobadfish.warbridge.room.floattext;
 
 import cn.nukkit.level.Position;
-import org.sobadfish.warbridge.entity.BedWarFloatText;
+import org.sobadfish.warbridge.entity.GameFloatText;
 import org.sobadfish.warbridge.manager.FloatTextManager;
 import org.sobadfish.warbridge.room.GameRoom;
 import org.sobadfish.warbridge.room.config.WorldInfoConfig;
@@ -11,7 +11,7 @@ public class FloatTextInfo {
 
     public FloatTextInfoConfig floatTextInfoConfig;
 
-    public BedWarFloatText bedWarFloatText;
+    public GameFloatText gameFloatText;
 
     public FloatTextInfo(FloatTextInfoConfig config){
         this.floatTextInfoConfig = config;
@@ -20,9 +20,9 @@ public class FloatTextInfo {
     public FloatTextInfo init(GameRoom room){
         try{
             Position position = WorldInfoConfig.getPositionByString(floatTextInfoConfig.position);
-            bedWarFloatText = BedWarFloatText.showFloatText(floatTextInfoConfig.name,position,"");
-            if(bedWarFloatText != null){
-                bedWarFloatText.room = room;
+            gameFloatText = GameFloatText.showFloatText(floatTextInfoConfig.name,position,"");
+            if(gameFloatText != null){
+                gameFloatText.room = room;
             }
 
         }catch (Exception e){
@@ -41,12 +41,12 @@ public class FloatTextInfo {
             return false;
         }
 
-        if(bedWarFloatText != null){
-            if(bedWarFloatText.isClosed()){
-                FloatTextManager.removeFloatText(bedWarFloatText);
+        if(gameFloatText != null){
+            if(gameFloatText.isClosed()){
+                FloatTextManager.removeFloatText(gameFloatText);
                 init(room);
             }
-            bedWarFloatText.setText(text);
+            gameFloatText.setText(text);
         }
         return true;
     }

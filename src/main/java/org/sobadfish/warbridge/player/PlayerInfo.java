@@ -1,7 +1,10 @@
 package org.sobadfish.warbridge.player;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.PlayerEnderChestInventory;
 import cn.nukkit.inventory.PlayerInventory;
@@ -14,6 +17,7 @@ import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import org.sobadfish.warbridge.WarBridgeMain;
+import org.sobadfish.warbridge.event.PlayerGameDeathEvent;
 import org.sobadfish.warbridge.player.message.ScoreBoardMessage;
 import org.sobadfish.warbridge.player.team.TeamInfo;
 import org.sobadfish.warbridge.room.GameRoom;
@@ -44,11 +48,21 @@ public class PlayerInfo {
 
     public int killCount = 0;
 
+    public int damageTime = 0;
+
+    public int deathCount = 0;
+
+
+    public int assists = 0;
+
     private PlayerInfo damageByInfo = null;
 
     public PlayerInventory inventory;
 
     public PlayerEnderChestInventory eInventory;
+
+    //助攻
+    public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
 
     public LinkedHashMap<Integer,Item> armor = new LinkedHashMap<Integer,Item>(){
         {
@@ -67,8 +81,35 @@ public class PlayerInfo {
         return player;
     }
 
+    public int getKillCount() {
+        return killCount;
+    }
+
+    public String getName(){
+        return player.getName();
+    }
+
+    public void setPlayer(EntityHuman player) {
+        this.player = player;
+    }
+
     public void setTeamInfo(TeamInfo teamInfo) {
         this.teamInfo = teamInfo;
+    }
+
+    public void setDamageByInfo(PlayerInfo damageByInfo) {
+        if(damageByInfo != null) {
+
+            this.damageByInfo = damageByInfo;
+            damageTime = 5;
+            assistsPlayers.put(damageByInfo,System.currentTimeMillis());
+            //现身
+            getPlayer().removeEffect(14);
+        }
+    }
+
+    public PlayerInfo getDamageByInfo() {
+        return damageByInfo;
     }
 
     /**
@@ -91,6 +132,18 @@ public class PlayerInfo {
         }
         //TODO 给玩家初始化物品
         getPlayer().getInventory().setHeldItemSlot(0);
+    }
+
+    private void addKill(PlayerInfo info){
+
+        info.killCount++;
+        //助攻累计
+        for(PlayerInfo playerInfo: assistsPlayers.keySet()){
+            if(playerInfo.equals(info)){
+                continue;
+            }
+            playerInfo.assists++;
+        }
     }
 
     /**
@@ -474,6 +527,7 @@ public class PlayerInfo {
 
     private ArrayList<String> getLore(boolean isWait){
         //TODO 构建Lore
+
        return  null;
     }
     private int loadTime = 0;
@@ -517,6 +571,79 @@ public class PlayerInfo {
     }
 
     public void death(EntityDamageEvent event){
+
+        player.setHealth(player.getMaxHealth());
+        if(player instanceof Player){
+            ((Player) player).removeAllWindows();
+            ((Player) player).getUIInventory().clearAll();
+        }
+        PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),WarBridgeMain.getWarBridgeMain());
+        Server.getInstance().getPluginManager().callEvent(event1);
+        if(getPlayer() instanceof Player) {
+            ((Player) getPlayer()).setGamemode(3);
+        }
+
+        player.removeAllEffects();
+        if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
+            return;
+        }
+        player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+        deathCount++;
+        if(event != null) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                if(damageByInfo != null){
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。");
+                    addKill(damageByInfo);
+                }
+                gameRoom.sendMessage(this + "&e掉入虚空");
+
+            } else if (event instanceof EntityDamageByEntityEvent) {
+                Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+                if (entity instanceof Player) {
+                    PlayerInfo info = WarBridgeMain.getRoomManager().getPlayerInfo((Player) entity);
+                    String killInfo = "击杀";
+                    if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
+                        killInfo = "射杀";
+                    }
+                    if (info != null) {
+                        addKill(info);
+                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。");
+                    }
+                } else {
+                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了");
+                }
+            } else {
+                if(damageByInfo != null){
+                    addKill(damageByInfo);
+                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了");
+                }else {
+                    String deathInfo = "&e死了";
+                    switch (event.getCause()){
+                        case LAVA:
+                            deathInfo = "&e被岩浆烧死了";
+                            break;
+                        case FALL:
+                            deathInfo = "&e摔死了";
+                            break;
+                        case FIRE:
+                            deathInfo = "&e被烧了";
+                            break;
+                        case HUNGER:
+                            deathInfo = "&e饿死了";
+                            break;
+                        default:break;
+                    }
+                    gameRoom.sendMessage(this +deathInfo);
+                }
+            }
+        }
+//        playerType = PlayerType.DEATH;
+        damageByInfo = null;
+        player.getInventory().clearAll();
+        player.getOffhandInventory().clearAll();
+        if(playerType == PlayerType.WATCH){
+            getGameRoom().joinWatch(this);
+        }
 
     }
 

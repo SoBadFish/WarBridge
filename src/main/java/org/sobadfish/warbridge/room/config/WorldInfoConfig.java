@@ -16,16 +16,20 @@ import java.io.File;
  */
 public class WorldInfoConfig {
 
-    private String level;
     /*
      * 游戏地图
      * */
-//    private Level gameWorld;
+    private String level;
 
-    /**
+
+    /*
      * 等待大厅坐标
      * */
     private String waitPosition;
+
+
+
+
     private WorldInfoConfig(String gameWorld,
                             String waitPosition
     ){
@@ -46,8 +50,6 @@ public class WorldInfoConfig {
         if(Server.getInstance().isLevelLoaded(level)){
             l = Server.getInstance().getLevelByName(level);
         }
-//        Level l =  Server.getInstance().isLevelLoaded(level) && Server.getInstance().getLevelByName(level) != null
-//                && Server.getInstance().getLevelByName(level).getSafeSpawn() != null?Server.getInstance().getLevelByName(level):null;
         return l;
     }
 

@@ -24,6 +24,7 @@ public class WarBridgeMain extends PluginBase {
 
     public static WarBridgeMain warBridgeMain;
 
+    public static final String GAME_NAME = "WarBridge";
 
     private static RoomManager roomManager;
 

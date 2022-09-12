@@ -24,20 +24,29 @@ public class TeamInfoConfig {
      * */
     private String spawnPosition;
 
+    /**
+     * 得分点
+     * */
+    private String scorePosition;
 
 
-    public TeamInfoConfig(TeamConfig teamConfig, String spawnPosition){
+
+    public TeamInfoConfig(TeamConfig teamConfig, String spawnPosition,String scorePosition){
         this.teamConfig = teamConfig;
         this.spawnPosition = spawnPosition;
+        this.scorePosition = scorePosition;
 
     }
 
 
     public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map<?,?> map){
 
-        return new TeamInfoConfig(teamConfig,map.get("position").toString());
+        return new TeamInfoConfig(teamConfig,map.get("position").toString(),map.get("score").toString());
     }
 
+    public Position getScorePosition() {
+        return WorldInfoConfig.getPositionByString(scorePosition);
+    }
 
     public Position getSpawnPosition() {
         return WorldInfoConfig.getPositionByString(spawnPosition);
@@ -59,6 +68,7 @@ public class TeamInfoConfig {
         LinkedHashMap<String, Object> config = new LinkedHashMap<>();
         config.put("name",teamConfig.getName());
         config.put("position",spawnPosition);
+        config.put("score",scorePosition);
         return config;
     }
 }

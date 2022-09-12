@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.item.Item;
 import org.sobadfish.warbridge.panel.ChestInventoryPanel;
-import org.sobadfish.warbridge.panel.from.WarBridgeFrom;
+import org.sobadfish.warbridge.panel.from.GameFrom;
 import org.sobadfish.warbridge.player.PlayerInfo;
 
 
@@ -39,7 +39,7 @@ public abstract class BasePlayPanelItemInstance {
      * @param from 按键GUI
      *
      * */
-    public abstract void onClickButton(Player player, WarBridgeFrom from);
+    public abstract void onClickButton(Player player, GameFrom from);
 
     /**
      * 箱子菜单展示物品

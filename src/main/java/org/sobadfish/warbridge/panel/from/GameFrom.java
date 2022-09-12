@@ -14,7 +14,7 @@ import java.util.List;
  * @author SoBadFish
  * 2022/1/12
  */
-public class WarBridgeFrom {
+public class GameFrom {
 
     private final int id;
 
@@ -25,7 +25,7 @@ public class WarBridgeFrom {
     private final String title;
 
     private final String context;
-    public WarBridgeFrom(String title, String context, int id){
+    public GameFrom(String title, String context, int id){
         this.title = title;
         this.context = context;
         this.id = id;

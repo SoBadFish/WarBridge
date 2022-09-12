@@ -15,7 +15,7 @@ import org.sobadfish.warbridge.room.GameRoom;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class BedWarFloatText extends Entity {
+public class GameFloatText extends Entity {
 
     public String name;
 
@@ -28,7 +28,7 @@ public class BedWarFloatText extends Entity {
 
     public List<Player> player = new CopyOnWriteArrayList<>();
 
-    public BedWarFloatText(String name, FullChunk fullChunk, CompoundTag compoundTag) {
+    public GameFloatText(String name, FullChunk fullChunk, CompoundTag compoundTag) {
         super(fullChunk, compoundTag);
         this.name = name;
         this.setNameTagAlwaysVisible(true);
@@ -84,10 +84,10 @@ public class BedWarFloatText extends Entity {
     }
 
 
-    public static BedWarFloatText showFloatText(String name,Position position, String text){
-        BedWarFloatText text1;
+    public static GameFloatText showFloatText(String name, Position position, String text){
+        GameFloatText text1;
         try {
-            text1 = new BedWarFloatText(name, position.getChunk(), Entity.getDefaultNBT(position));
+            text1 = new GameFloatText(name, position.getChunk(), Entity.getDefaultNBT(position));
         }catch (Exception e){
             return null;
         }

@@ -14,9 +14,9 @@ import org.sobadfish.warbridge.event.GameCloseEvent;
 import org.sobadfish.warbridge.event.GameRoomStartEvent;
 import org.sobadfish.warbridge.event.PlayerJoinRoomEvent;
 import org.sobadfish.warbridge.event.PlayerQuitRoomEvent;
-import org.sobadfish.warbridge.item.FollowItem;
-import org.sobadfish.warbridge.item.RoomQuitItem;
-import org.sobadfish.warbridge.item.TeamChoseItem;
+import org.sobadfish.warbridge.item.button.FollowItem;
+import org.sobadfish.warbridge.item.button.RoomQuitItem;
+import org.sobadfish.warbridge.item.button.TeamChoseItem;
 import org.sobadfish.warbridge.manager.RandomJoinManager;
 import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.WorldResetManager;
@@ -57,6 +57,8 @@ public class GameRoom {
     private boolean hasStart;
 
     public int loadTime = -1;
+
+    public int gameStart = 0;
 
     private GameType type;
 
@@ -553,12 +555,15 @@ public class GameRoom {
                 }
             }
             sendTitle("&c游戏开始");
-
+            gameStart = 5;
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             GameRoomStartEvent event = new GameRoomStartEvent(this,WarBridgeMain.getWarBridgeMain());
             Server.getInstance().getPluginManager().callEvent(event);
 
+        }
+        if(gameStart > 0){
+            gameStart--;
         }
         if(loadTime > 0) {
 
@@ -676,7 +681,7 @@ public class GameRoom {
 
             //浮空字释放
             for(FloatTextInfo floatTextInfo: floatTextInfos){
-                floatTextInfo.bedWarFloatText.toClose();
+                floatTextInfo.gameFloatText.toClose();
             }
 
             String level = worldInfo.getConfig().getLevel();
@@ -710,6 +715,15 @@ public class GameRoom {
             RoomManager.LOCK_GAME.remove(getRoomConfig());
         }
 
+    }
+
+    public void addScore(PlayerInfo playerInfo){
+        TeamInfo teamInfo = playerInfo.getTeamInfo();
+        if(teamInfo != null){
+            teamInfo.score += 1;
+            //TODO 当队伍获得分数
+
+        }
     }
 
 

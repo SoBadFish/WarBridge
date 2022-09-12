@@ -1,9 +1,10 @@
-package org.sobadfish.warbridge.item;
+package org.sobadfish.warbridge.item.button;
 
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.warbridge.WarBridgeMain;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class TeamChoseItem {
         Item item = Item.get(69);
         item.setCustomName(TextFormat.colorize('&',"&r&l&e点我选择队伍"));
         CompoundTag tag = item.getNamedTag();
-        tag.putString("WarBridge","choseTeam");
+        tag.putString(WarBridgeMain.GAME_NAME,"choseTeam");
         item.setNamedTag(tag);
         return item;
     }

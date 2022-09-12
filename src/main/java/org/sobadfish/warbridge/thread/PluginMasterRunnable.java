@@ -5,7 +5,7 @@ import cn.nukkit.Server;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.warbridge.WarBridgeMain;
-import org.sobadfish.warbridge.entity.BedWarFloatText;
+import org.sobadfish.warbridge.entity.GameFloatText;
 import org.sobadfish.warbridge.manager.FloatTextManager;
 import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.ThreadManager;
@@ -43,7 +43,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
         }
         StringBuilder s = new StringBuilder(color + "插件主进程  浮空字 &7(" +
                 FloatTextManager.floatTextList.size() + ") &a" + loadTime + " ms\n");
-        for(BedWarFloatText floatText:FloatTextManager.floatTextList){
+        for(GameFloatText floatText:FloatTextManager.floatTextList){
             s.append("&r   - ").append(floatText.name).append(" &7pos=(")
                     .append(floatText.getFloorX()).append(":")
                     .append(floatText.getFloorY()).append(":")
@@ -68,7 +68,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 return;
             }
             for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
-                for (BedWarFloatText floatText : new CopyOnWriteArrayList<>(FloatTextManager.floatTextList)) {
+                for (GameFloatText floatText : new CopyOnWriteArrayList<>(FloatTextManager.floatTextList)) {
                     if (floatText == null) {
                         continue;
                     }
