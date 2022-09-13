@@ -166,6 +166,7 @@ public class TeamInfo {
         }
         if(stop){
             close = true;
+            return;
         }
         if(hasScore){
             loadTime++;
@@ -175,6 +176,21 @@ public class TeamInfo {
             }
         }
 
+        int d = 0;
+        for(PlayerInfo info: getTeamPlayers()){
+            if(info.getPlayerType() == PlayerInfo.PlayerType.WATCH || info.getPlayerType() == PlayerInfo.PlayerType.LEAVE){
+                d++;
+            }
+        }
+
+
+
+        if(d == getTeamPlayers().size()){
+            //被淘汰了
+            room.sendMessage("&r团灭 > "+toString()+"&c已被淘汰!");
+            echoDefeat();
+            stop = true;
+        }
 
     }
 
