@@ -6,6 +6,7 @@ import org.sobadfish.warbridge.room.GameRoom;
 import org.sobadfish.warbridge.thread.PluginMasterRunnable;
 import org.sobadfish.warbridge.thread.RandomJoinRunnable;
 import org.sobadfish.warbridge.thread.RoomLoadRunnable;
+import org.sobadfish.warbridge.thread.TopRunnable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -115,6 +116,7 @@ public class ThreadManager {
         ThreadManager.schedule(new RunnableCheck());
         ThreadManager.schedule(new PluginMasterRunnable(),1);
         ThreadManager.schedule(new RoomLoadRunnable());
+        ThreadManager.schedule(new TopRunnable());
         ThreadManager.schedule(new RandomJoinRunnable());
 
     }

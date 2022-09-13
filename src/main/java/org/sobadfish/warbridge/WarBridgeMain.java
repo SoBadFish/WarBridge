@@ -9,7 +9,10 @@ import org.sobadfish.warbridge.command.WarBridgeSpeakCommand;
 import org.sobadfish.warbridge.manager.MenuRoomManager;
 import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.ThreadManager;
+import org.sobadfish.warbridge.manager.data.PlayerDataManager;
+import org.sobadfish.warbridge.manager.data.PlayerTopManager;
 import org.sobadfish.warbridge.panel.lib.AbstractFakeInventory;
+import org.sobadfish.warbridge.room.config.GameRoomConfig;
 
 import java.io.File;
 
@@ -32,6 +35,13 @@ public class WarBridgeMain extends PluginBase {
     private static RoomManager roomManager;
 
     private static MenuRoomManager menuRoomManager;
+
+    private static PlayerDataManager dataManager;
+
+    private static PlayerTopManager topManager;
+
+
+    public static int upExp;
 
     @Override
     public void onEnable() {
@@ -82,12 +92,17 @@ public class WarBridgeMain extends PluginBase {
 
     }
 
+    public static int getUpExp(){
+        return upExp;
+    }
+
     /**
      * 加载配置文件
      */
     public void loadConfig(){
         saveDefaultConfig();
         reloadConfig();
+        upExp = getConfig().getInt("up-exp",500);
         File mainFileDir = new File(this.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
@@ -103,7 +118,21 @@ public class WarBridgeMain extends PluginBase {
             reloadConfig();
         }
         menuRoomManager = new MenuRoomManager(getConfig());
+        dataManager = PlayerDataManager.asFile(new File(this.getDataFolder()+File.separator+"player.json"));
+        //初始化排行榜
+        topManager = PlayerTopManager.asFile(new File(this.getDataFolder()+File.separator+"top.json"));
+        if(topManager != null){
+            topManager.init();
+        }
 
+    }
+
+    public static PlayerDataManager getDataManager() {
+        return dataManager;
+    }
+
+    public static PlayerTopManager getTopManager() {
+        return topManager;
     }
 
     public static RoomManager getRoomManager() {
@@ -177,6 +206,21 @@ public class WarBridgeMain extends PluginBase {
             sendMessageToConsole("&e当前核心为 Nukkit PM1E");
         }else{
             sendMessageToConsole("&e当前核心为 Nukkit");
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        if(topManager != null){
+            topManager.save();
+        }
+        if(dataManager != null){
+            dataManager.save();
+        }
+        if(roomManager != null){
+            for (GameRoomConfig roomConfig: roomManager.getRoomConfigs()){
+                roomConfig.save();
+            }
         }
     }
 

@@ -1,17 +1,20 @@
 package org.sobadfish.warbridge.command;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.manager.ThreadManager;
+import org.sobadfish.warbridge.player.PlayerData;
 import org.sobadfish.warbridge.player.PlayerInfo;
 import org.sobadfish.warbridge.room.GameRoom;
 import org.sobadfish.warbridge.room.GameRoomCreater;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
 import org.sobadfish.warbridge.room.config.WorldInfoConfig;
 import org.sobadfish.warbridge.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.warbridge.top.TopItem;
 
 import java.util.LinkedHashMap;
 
@@ -65,6 +68,7 @@ public class WarBridgeAdminCommand extends Command {
             commandSender.sendMessage("其他指令介绍:");
             commandSender.sendMessage("/wba reload 重新载入配置");
             commandSender.sendMessage("/wba set [名称] 创建一个自定义房间模板");
+            commandSender.sendMessage("/wba exp [玩家] [数量] <由来> 增加玩家经验");
             commandSender.sendMessage("/wba tsl 读取模板的队伍数据");
             commandSender.sendMessage("/wba see 查看所有加载的房间");
             commandSender.sendMessage("/wba close [名称] 关闭房间");
@@ -72,7 +76,12 @@ public class WarBridgeAdminCommand extends Command {
             commandSender.sendMessage("/wba end 停止模板预设");
             commandSender.sendMessage("/wba float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
             commandSender.sendMessage("/wba cancel 终止房间创建");
-
+            commandSender.sendMessage("/gda top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
+            StringBuilder v = new StringBuilder("类型: ");
+            for(PlayerData.DataType type: PlayerData.DataType.values()){
+                v.append(type.getName()).append(" , ");
+            }
+            commandSender.sendMessage(v.toString());
             return true;
         }
         if (strings.length == 0) {
@@ -99,6 +108,85 @@ public class WarBridgeAdminCommand extends Command {
                 if(commandSender instanceof Player) {
                     if (create.containsKey(commandSender.getName())) {
                         create.get(commandSender.getName()).stopInit();
+                    }
+                }else{
+                    commandSender.sendMessage("请不要在控制台执行");
+                    return false;
+                }
+                break;
+            case "exp":
+                if(strings.length < 3){
+                    commandSender.sendMessage("指令参数错误 执行/wba help 查看帮助");
+                    return false;
+                }
+                String playerName = strings[1];
+                Player player = Server.getInstance().getPlayer(playerName);
+                if(player != null){
+                    playerName = player.getName();
+                }
+                String expString = strings[2];
+                int exp = 0;
+                try {
+                    exp = Integer.parseInt(expString);
+                }catch (Exception ignore){}
+                String cause = "指令给予";
+                if(strings.length > 3){
+                    cause = strings[3];
+                }
+                if(exp > 0){
+                    PlayerData playerData = WarBridgeMain.getDataManager().getData(playerName);
+                    playerData.addExp(exp,cause);
+                    commandSender.sendMessage("成功给予玩家 "+playerName+" "+exp+" 点经验");
+                }else{
+                    commandSender.sendMessage("经验必须大于0");
+                    return false;
+                }
+                break;
+            case "top":
+                if(commandSender instanceof Player) {
+                    if (strings.length < 3) {
+                        commandSender.sendMessage("指令参数错误 执行/wba help 查看帮助");
+                        return false;
+                    }
+                    String name = strings[2];
+
+
+                    if ("add".equalsIgnoreCase(strings[1])) {
+                        if(strings.length < 4){
+                            commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                            return false;
+                        }
+                        PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
+                        if (type == null) {
+                            commandSender.sendMessage("未知类型");
+                            return true;
+                        }
+                        String room = null;
+                        if (strings.length > 4) {
+                            room = strings[4];
+                        }
+                        TopItem item = new TopItem(name,type,((Player) commandSender).getPosition(),"");
+                        item.room = room;
+                        if(WarBridgeMain.getTopManager().hasTop(name)){
+                            commandSender.sendMessage("存在名称为 "+name+" 的排行榜了");
+                            return true;
+                        }
+                        item.setTitle(TextFormat.colorize('&',WarBridgeMain.getTitle()+" &a"+type.getName()+" &r排行榜"));
+                        WarBridgeMain.getTopManager().addTopItem(item);
+                        commandSender.sendMessage("排行榜创建成功");
+                    } else {
+                        if(!WarBridgeMain.getTopManager().hasTop(name)){
+                            commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
+                            return true;
+                        }
+                        TopItem topItem = WarBridgeMain.getTopManager().getTop(name);
+                        if(topItem == null){
+                            commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
+                            return true;
+                        }
+                        WarBridgeMain.getTopManager().removeTopItem(topItem);
+                        commandSender.sendMessage("排行榜删除成功");
+
                     }
                 }else{
                     commandSender.sendMessage("请不要在控制台执行");

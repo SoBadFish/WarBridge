@@ -38,6 +38,7 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.event.GameRoomStartEvent;
+import org.sobadfish.warbridge.event.PlayerGetExpEvent;
 import org.sobadfish.warbridge.event.TeamDefeatEvent;
 import org.sobadfish.warbridge.event.TeamVictoryEvent;
 import org.sobadfish.warbridge.item.ItemIDSunName;
@@ -49,6 +50,7 @@ import org.sobadfish.warbridge.panel.from.GameFrom;
 import org.sobadfish.warbridge.panel.from.button.BaseIButtom;
 import org.sobadfish.warbridge.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.warbridge.panel.items.PlayerItem;
+import org.sobadfish.warbridge.player.PlayerData;
 import org.sobadfish.warbridge.player.PlayerInfo;
 import org.sobadfish.warbridge.player.team.TeamInfo;
 import org.sobadfish.warbridge.room.GameRoom;
@@ -868,6 +870,37 @@ public class RoomManager implements Listener {
         }
 
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
+
+    }
+
+    @EventHandler
+    public void onGetExp(PlayerGetExpEvent event){
+        String playerName = event.getPlayerName();
+        Player player = Server.getInstance().getPlayer(playerName);
+        if(player != null){
+            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" 经验("+event.getCause()+")"));
+            PlayerInfo info = WarBridgeMain.getRoomManager().getPlayerInfo(player);
+            PlayerData data = WarBridgeMain.getDataManager().getData(playerName);
+
+            if(info == null || info.getGameRoom() == null){
+
+                WarBridgeMain.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                WarBridgeMain.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+                String line = String.format("%20s","");
+                player.sendMessage(line);
+                String inputTitle = "&b&l小游戏经验\n";
+                WarBridgeMain.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
+                WarBridgeMain.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
+
+                WarBridgeMain.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
+
+                String d = String.format("%.1f",data.getExpPercent() * 100.0);
+                WarBridgeMain.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
+                WarBridgeMain.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                WarBridgeMain.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+
+            }
+        }
 
     }
 
