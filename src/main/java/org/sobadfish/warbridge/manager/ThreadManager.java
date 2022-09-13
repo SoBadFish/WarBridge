@@ -1,12 +1,10 @@
 package org.sobadfish.warbridge.manager;
 
 
+import cn.nukkit.Server;
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.room.GameRoom;
-import org.sobadfish.warbridge.thread.PluginMasterRunnable;
-import org.sobadfish.warbridge.thread.RandomJoinRunnable;
-import org.sobadfish.warbridge.thread.RoomLoadRunnable;
-import org.sobadfish.warbridge.thread.TopRunnable;
+import org.sobadfish.warbridge.thread.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -118,6 +116,8 @@ public class ThreadManager {
         ThreadManager.schedule(new RoomLoadRunnable());
         ThreadManager.schedule(new TopRunnable());
         ThreadManager.schedule(new RandomJoinRunnable());
+        Server.getInstance().getScheduler().scheduleRepeatingTask(WarBridgeMain.getWarBridgeMain(),
+                new PlayerLocationRunnable(WarBridgeMain.getWarBridgeMain()),10);
 
     }
 
