@@ -37,10 +37,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.WarBridgeMain;
-import org.sobadfish.warbridge.event.GameRoomStartEvent;
-import org.sobadfish.warbridge.event.PlayerGetExpEvent;
-import org.sobadfish.warbridge.event.TeamDefeatEvent;
-import org.sobadfish.warbridge.event.TeamVictoryEvent;
+import org.sobadfish.warbridge.event.*;
 import org.sobadfish.warbridge.item.ItemIDSunName;
 import org.sobadfish.warbridge.item.button.RoomQuitItem;
 import org.sobadfish.warbridge.item.button.TeamChoseItem;
@@ -981,6 +978,60 @@ public class RoomManager implements Listener {
                 event.setCancelled();
             }
         }
+    }
+    @EventHandler
+    public void onPlayerJoinRoom(PlayerJoinRoomEvent event){
+        PlayerInfo info = event.getPlayerInfo();
+        GameRoom gameRoom = event.getRoom();
+        if (WarBridgeMain.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())) {
+            String roomName = WarBridgeMain.getRoomManager().playerJoin.get(info.getPlayer().getName());
+            if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
+                if(event.isSend()) {
+                    info.sendForceMessage("&c你已经在这个房间内了");
+                }
+                event.setCancelled();
+                return;
+            }
+            if (WarBridgeMain.getRoomManager().hasGameRoom(roomName)) {
+                GameRoom room = WarBridgeMain.getRoomManager().getRoom(roomName);
+                if (room.getType() != GameRoom.GameType.END && room.getPlayerInfos().contains(info)) {
+                    if (room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
+                            room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
+                        if(event.isSend()) {
+                            info.sendForceMessage("&c你已经在游戏房间内了");
+                        }
+                        event.setCancelled();
+
+                    }
+                }
+            }
+        }
+        if(gameRoom.getType() != GameRoom.GameType.WAIT){
+            if(GameType.END != gameRoom.getType()){
+                //TODO 或许还能旁观
+                if(gameRoom.getRoomConfig().hasWatch){
+                    event.setCancelled();
+                    return;
+                }
+
+            }
+            if(event.isSend()) {
+                info.sendForceMessage("&c游戏已经开始了");
+            }
+            event.setCancelled();
+            return;
+        }
+        if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
+            if(event.isSend()) {
+                info.sendForceMessage("&c房间满了");
+            }
+            event.setCancelled();
+        }
+        if(info.getPlayer() instanceof Player) {
+            ((Player) info.getPlayer()).setFoodEnabled(false);
+            ((Player) info.getPlayer()).setGamemode(2);
+        }
+
     }
 
 
