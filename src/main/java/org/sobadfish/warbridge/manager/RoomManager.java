@@ -321,7 +321,9 @@ public class RoomManager implements Listener {
                             info.spawn();
                         }else{
                             room.addScore(info);
+                            return;
                         }
+
                     }
 
                 }

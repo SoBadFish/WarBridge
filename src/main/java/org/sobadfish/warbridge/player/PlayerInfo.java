@@ -612,7 +612,7 @@ public class PlayerInfo {
                     return;
                 }
             }
-            if(!player.isImmobile()) {
+            if(!player.isImmobile() && !isWatch()) {
                 player.setImmobile(true);
             }
             sendTitle(gameRoom.cause, 2);
@@ -641,6 +641,7 @@ public class PlayerInfo {
                 player.teleport(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition());
             }
         }
+
 
 
         try{

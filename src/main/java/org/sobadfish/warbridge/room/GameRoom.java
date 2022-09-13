@@ -808,7 +808,7 @@ public class GameRoom {
                 sendMessage(Utils.writeLine(19,"&6●"));
                 sendMessage("");
                 sendMessage(Utils.getCentontString(playerInfo+"&e得分！",19));
-                sendMessage(Utils.getCentontString(s1.toString(),19));
+                sendMessage(Utils.getCentontString(s1.substring(0,s1.length() - 3),19));
                 sendMessage("");
                 sendMessage(Utils.writeLine(19,"&6●"));
             }
