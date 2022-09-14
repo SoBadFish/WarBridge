@@ -416,11 +416,15 @@ public class PlayerInfo {
 
             player.getInventory().setArmorItem(entry.getKey(), item);
         }
+        //给予玩家初始物品
         player.getInventory().addItem(new ItemSwordIron());
         player.getInventory().addItem(new ItemBow());
         ItemPickaxeDiamond diamond = new ItemPickaxeDiamond();
         diamond.addEnchantment(Enchantment.getEnchantment(15).setLevel(2));
         player.getInventory().addItem(diamond);
+        Item item1 = Item.get(280);
+        item1.addEnchantment(Enchantment.getEnchantment(12));
+        player.getInventory().addItem(item1);
         Item item = getTeamInfo().getTeamConfig().getTeamConfig().getBlockWoolColor();
         item.setCount(128);
         player.getInventory().addItem(item);
