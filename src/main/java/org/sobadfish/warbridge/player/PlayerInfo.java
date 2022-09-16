@@ -51,6 +51,8 @@ public class PlayerInfo {
 
     public int killCount = 0;
 
+    public int scoreCount = 0;
+
     public int damageTime = 0;
 
     public int deathCount = 0;

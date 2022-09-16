@@ -13,6 +13,8 @@ import org.sobadfish.warbridge.manager.data.PlayerDataManager;
 import org.sobadfish.warbridge.manager.data.PlayerTopManager;
 import org.sobadfish.warbridge.panel.lib.AbstractFakeInventory;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
+import org.sobadfish.warbridge.variable.TipVariable;
+import org.sobadfish.warbridge.variable.WarBridgeVariable;
 
 import java.io.File;
 
@@ -63,6 +65,14 @@ public class WarBridgeMain extends PluginBase {
         this.getServer().getCommandMap().register("warbridge",new WarBridgeCommand("wb"));
         this.getServer().getCommandMap().register("warbridge",new WarBridgeSpeakCommand("wbs"));
         ThreadManager.init();
+        try{
+            Class.forName("com.smallaswater.npc.variable.BaseVariableV2");
+            WarBridgeVariable.init();
+        }catch (Exception ignore){}
+        try{
+            Class.forName("tip.utils.variables.BaseVariable");
+            TipVariable.init();
+        }catch (Exception ignore){}
         this.getLogger().info(TextFormat.colorize('&',"&a战桥插件加载完成，祝您使用愉快"));
     }
 

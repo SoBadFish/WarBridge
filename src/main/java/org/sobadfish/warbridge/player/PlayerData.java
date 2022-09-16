@@ -247,6 +247,8 @@ public class PlayerData {
         data.deathCount += info.deathCount;
         data.killCount += info.killCount;
         data.assist += info.assists;
+        data.scoreCount += info.scoreCount;
+
     }
 
     @Override

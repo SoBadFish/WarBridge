@@ -792,6 +792,7 @@ public class GameRoom {
         if(teamInfo != null){
             teamInfo.hasScore = true;
             isTeleport = true;
+            playerInfo.scoreCount += 1;
             teamInfo.score += 1;
             //TODO 当队伍获得分数
             if(teamInfo.score != 5){
