@@ -41,6 +41,10 @@ public class GameRoomConfig {
 
     public int minutesExp = 25;
     /**
+     * 每分钟获得的经验
+     */
+    public int minutesExp = 25;
+    /**
      * 满人等待时长
      * */
     private int maxWaitTime;
@@ -297,6 +301,7 @@ public class GameRoomConfig {
         config.set("QuitRoom",quitRoomCommand);
         config.set("minutesExp",minutesExp);
         config.set("hasWatch", hasWatch);
+        config.set("minutesExp",minutesExp);
         config.set("AutomaticNextRound",isAutomaticNextRound);
         config.set("defeatCmd",defeatCommand);
         config.set("victoryCmd",victoryCommand);

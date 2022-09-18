@@ -610,18 +610,16 @@ public class GameRoom {
             for (TeamInfo teamInfo : teamInfos) {
                 teamInfo.onUpdate();
                 if(teamInfo.score == 5){
-                    teamInfo.echoVictory();
-                    type = GameType.END;
-                    worldInfo.setClose(true);
-                    loadTime = 5;
+                   gameEnd(teamInfo);
+                   break;
                 }
             }
+
+            //当只剩下一个队伍的时候获胜的逻辑
             if (getLiveTeam().size() == 1) {
                 TeamInfo teamInfo = getLiveTeam().get(0);
-                teamInfo.echoVictory();
-                type = GameType.END;
-                worldInfo.setClose(true);
-                loadTime = 5;
+                gameEnd(teamInfo);
+
             }
 
         }else{
@@ -650,6 +648,19 @@ public class GameRoom {
             worldInfo.setClose(true);
             loadTime = -1;
         }
+    }
+
+    /**
+     * 执行这个可以将游戏直接结束
+     * 传入胜利的队伍
+     * */
+    public void gameEnd(TeamInfo... teamInfo){
+        for(TeamInfo teamInfo1:teamInfo){
+            teamInfo1.echoVictory();
+        }
+        type = GameType.END;
+        worldInfo.setClose(true);
+        loadTime = 5;
     }
 
     private void onWait() {

@@ -121,6 +121,7 @@ public class TeamInfo {
         TeamVictoryEvent event = new TeamVictoryEvent(this,room, WarBridgeMain.getWarBridgeMain());
         Server.getInstance().getPluginManager().callEvent(event);
 
+
     }
 
     public void echoDefeat(){
