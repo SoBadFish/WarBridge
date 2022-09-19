@@ -9,6 +9,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
+import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.event.GameCloseEvent;
 import org.sobadfish.warbridge.event.GameRoomStartEvent;
@@ -21,7 +22,6 @@ import org.sobadfish.warbridge.manager.RandomJoinManager;
 import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.WorldResetManager;
 import org.sobadfish.warbridge.player.PlayerInfo;
-import org.sobadfish.warbridge.player.message.BossBarBuilder;
 import org.sobadfish.warbridge.player.team.TeamInfo;
 import org.sobadfish.warbridge.player.team.config.TeamInfoConfig;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
@@ -62,7 +62,7 @@ public class GameRoom {
     //房间内的玩家
     private final CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
-    private final LinkedHashMap<PlayerInfo, BossBarBuilder> scoreboards = new LinkedHashMap<>();
+    private final LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
 
     private boolean hasStart;
 
@@ -102,7 +102,7 @@ public class GameRoom {
     }
 
     //特供版为BOSS血条
-    public LinkedHashMap<PlayerInfo, BossBarBuilder> getScoreboards() {
+    public LinkedHashMap<PlayerInfo, Scoreboard> getScoreboards() {
         return scoreboards;
     }
 
