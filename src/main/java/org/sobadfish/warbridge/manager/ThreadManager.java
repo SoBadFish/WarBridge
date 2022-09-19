@@ -117,7 +117,7 @@ public class ThreadManager {
         ThreadManager.schedule(new TopRunnable());
         ThreadManager.schedule(new RandomJoinRunnable());
         Server.getInstance().getScheduler().scheduleRepeatingTask(WarBridgeMain.getWarBridgeMain(),
-                new PlayerLocationRunnable(WarBridgeMain.getWarBridgeMain()),10);
+                new PlayerLocationRunnable(WarBridgeMain.getWarBridgeMain()),5);
 
     }
 
