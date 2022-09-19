@@ -385,13 +385,18 @@ public class RoomManager implements Listener {
     public void onLevelTransfer(EntityLevelChangeEvent event){
         Entity entity = event.getEntity();
         GameRoom room = getGameRoomByLevel(event.getTarget());
+
         if(entity instanceof EntityHuman) {
+            PlayerInfo info = getPlayerInfo((EntityHuman) entity);
             if (room != null) {
-                PlayerInfo info = getPlayerInfo((EntityHuman) entity);
                 if(info == null){
                     info = new PlayerInfo((EntityHuman) entity);
                 }
+                if(info.getGameRoom() != null){
+                    info.getGameRoom().quitPlayerInfo(info,false);
+                }
                 GameRoom.JoinType type = room.joinPlayerInfo(info,true);
+
                 boolean isCancel = true;
                 switch (type) {
                     case CAN_WATCH:
@@ -401,9 +406,9 @@ public class RoomManager implements Listener {
                         } else {
                             if (info.getGameRoom() != null && !info.isWatch()) {
                                 info.sendForceMessage("&c你无法进入此房间");
-                                isCancel = false;
                             } else {
                                 room.joinWatch(info);
+                                isCancel = false;
                             }
                         }
                         break;
@@ -423,6 +428,15 @@ public class RoomManager implements Listener {
                 if(isCancel){
                     event.setCancelled();
                     WarBridgeMain.sendMessageToObject("&c你无法进入该地图",entity);
+                }
+
+            }else{
+                if(info != null){
+                    room = info.getGameRoom();
+                    if(room != null){
+                        room.quitPlayerInfo(info,true);
+                    }
+
                 }
 
             }

@@ -9,7 +9,6 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.potion.Effect;
-import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.event.GameCloseEvent;
 import org.sobadfish.warbridge.event.GameRoomStartEvent;
@@ -22,6 +21,7 @@ import org.sobadfish.warbridge.manager.RandomJoinManager;
 import org.sobadfish.warbridge.manager.RoomManager;
 import org.sobadfish.warbridge.manager.WorldResetManager;
 import org.sobadfish.warbridge.player.PlayerInfo;
+import org.sobadfish.warbridge.player.message.BossBarBuilder;
 import org.sobadfish.warbridge.player.team.TeamInfo;
 import org.sobadfish.warbridge.player.team.config.TeamInfoConfig;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
@@ -62,7 +62,7 @@ public class GameRoom {
     //房间内的玩家
     private final CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
-    private final LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
+    private final LinkedHashMap<PlayerInfo, BossBarBuilder> scoreboards = new LinkedHashMap<>();
 
     private boolean hasStart;
 
@@ -101,7 +101,8 @@ public class GameRoom {
         return floatTextInfos;
     }
 
-    public LinkedHashMap<PlayerInfo, Scoreboard> getScoreboards() {
+    //特供版为BOSS血条
+    public LinkedHashMap<PlayerInfo, BossBarBuilder> getScoreboards() {
         return scoreboards;
     }
 
@@ -188,56 +189,48 @@ public class GameRoom {
         if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
             return JoinType.NO_JOIN;
         }
-        if(info.getGameRoom() == null){
-            if(info.getPlayer() instanceof Player) {
-                if(!((Player) info.getPlayer()).isOnline()){
-                    return JoinType.NO_ONLINE;
-                }
-            }
-
-            if(getType() != GameType.WAIT){
-                if(getType() == GameType.END || getType() == GameType.CLOSE){
-                    return JoinType.NO_JOIN;
-                }
-                return JoinType.CAN_WATCH;
-            }
-            if(getWorldInfo().getConfig().getGameWorld() == null || getWorldInfo().getConfig().getGameWorld().getSafeSpawn() == null){
-                return JoinType.NO_LEVEL;
-            }
-
-            PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,WarBridgeMain.getWarBridgeMain());
-            event.setSend(sendMessage);
-            Server.getInstance().getPluginManager().callEvent(event);
-            if(event.isCancelled()){
-                return JoinType.NO_JOIN;
-            }
-
-            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
-            info.init();
-            info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
-            info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
-            info.setPlayerType(PlayerInfo.PlayerType.WAIT);
-            info.setGameRoom(this);
-            if(info.getPlayer() instanceof Player) {
-                WarBridgeMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
-            }
-            playerInfos.add(info);
-            info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
-            if(info.getPlayer() instanceof Player) {
-                ((Player)info.getPlayer()).setGamemode(2);
-            }
-            if(isInit){
-                isInit = false;
-            }
-
-        }else {
-            if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
-                return JoinType.NO_JOIN;
-            }else{
-                info.getGameRoom().quitPlayerInfo(info,true);
-                return JoinType.CAN_WATCH;
+        if(info.getPlayer() instanceof Player) {
+            if(!((Player) info.getPlayer()).isOnline()){
+                return JoinType.NO_ONLINE;
             }
         }
+
+        if(getType() != GameType.WAIT){
+            if(getType() == GameType.END || getType() == GameType.CLOSE){
+                return JoinType.NO_JOIN;
+            }
+            return JoinType.CAN_WATCH;
+        }
+        if(getWorldInfo().getConfig().getGameWorld() == null || getWorldInfo().getConfig().getGameWorld().getSafeSpawn() == null){
+            return JoinType.NO_LEVEL;
+        }
+
+        PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,WarBridgeMain.getWarBridgeMain());
+        event.setSend(sendMessage);
+        Server.getInstance().getPluginManager().callEvent(event);
+        if(event.isCancelled()){
+            return JoinType.NO_JOIN;
+        }
+
+        sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
+        info.init();
+        info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
+        info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
+        info.setPlayerType(PlayerInfo.PlayerType.WAIT);
+        info.setGameRoom(this);
+        if(info.getPlayer() instanceof Player) {
+            WarBridgeMain.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
+        }
+        playerInfos.add(info);
+        info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
+        if(info.getPlayer() instanceof Player) {
+            ((Player)info.getPlayer()).setGamemode(2);
+        }
+        if(isInit){
+            isInit = false;
+        }
+
+
         return JoinType.CAN_JOIN;
 
     }
