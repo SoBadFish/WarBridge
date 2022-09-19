@@ -121,7 +121,7 @@ public class Utils {
     public static boolean inArea(Position player,Position location,boolean y){
         Position n1 = new Position(location.getX() -1.5,location.getY(),location.getZ() - 1.5,location.level);
         Position n2 = new Position(location.getX() +1.5,location.getY(),location.getZ() + 1.5,location.level);
-        if(player.level == location.level) {
+        if(player.level.getFolderName().equalsIgnoreCase(location.level.getFolderName())) {
             if (player.x >= Math.min(n1.getX(), n2.getX())
                     && player.x <= Math.max(n1.getX(), n2.getX())
                     && player.z >= Math.min(n1.getZ(), n2.getZ())

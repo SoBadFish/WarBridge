@@ -222,6 +222,7 @@ public class RoomManager implements Listener {
 
 
 
+
     public PlayerInfo getPlayerInfo(EntityHuman player){
         //TODO 获取游戏中的玩家
         if(playerJoin.containsKey(player.getName())) {
