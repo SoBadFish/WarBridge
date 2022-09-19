@@ -38,6 +38,8 @@ public class GameRoomConfig {
      * 等待时长
      * */
     public int waitTime;
+
+    public int minutesExp = 25;
     /**
      * 满人等待时长
      * */
@@ -225,6 +227,7 @@ public class GameRoomConfig {
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,teamInfoConfigs);
                 roomConfig.hasWatch = room.getBoolean("hasWatch",true);
                 roomConfig.score = room.getInt("score",5);
+                roomConfig.minutesExp = room.getInt("minutesExp",25);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
@@ -292,6 +295,7 @@ public class GameRoomConfig {
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
         config.set("QuitRoom",quitRoomCommand);
+        config.set("minutesExp",minutesExp);
         config.set("hasWatch", hasWatch);
         config.set("AutomaticNextRound",isAutomaticNextRound);
         config.set("defeatCmd",defeatCommand);

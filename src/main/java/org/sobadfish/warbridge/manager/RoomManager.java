@@ -907,7 +907,7 @@ public class RoomManager implements Listener {
                 WarBridgeMain.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
                 String line = String.format("%20s","");
                 player.sendMessage(line);
-                String inputTitle = "&b&l小游戏经验\n";
+                String inputTitle = "&b&l战桥经验\n";
                 WarBridgeMain.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
                 WarBridgeMain.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
 

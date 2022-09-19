@@ -57,6 +57,7 @@ public class PlayerInfo {
 
     public int deathCount = 0;
 
+    public int updateTime = 0;
 
     public int assists = 0;
 
@@ -519,15 +520,16 @@ public class PlayerInfo {
     }
     @Override
     public String toString(){
+        PlayerData data = WarBridgeMain.getDataManager().getData(getName());
         String teamName = "&r";
         String playerName = player.getName();
         if(teamInfo != null && !isWatch()){
             teamName = teamInfo.getTeamConfig().getNameColor();
         }else if(isWatch()){
-            teamName = "&7 ";
+            teamName = "&7[旁观] ";
         }
 
-        return teamName+playerName;
+        return "&7["+data.getLevelString()+"&7]&r "+teamName+playerName;
     }
 
     public TeamInfo getTeamInfo() {
@@ -535,7 +537,6 @@ public class PlayerInfo {
     }
 
     private int spawnTime = 0;
-
 
 
 
@@ -611,6 +612,11 @@ public class PlayerInfo {
      * */
     public void onUpdate(){
 
+        if(gameRoom == null ||  gameRoom.getType() == GameRoom.GameType.END){
+            return;
+        }
+
+        updateTime++;
         //TODO 玩家更新线程
         if(gameRoom != null && gameRoom.gameStart > 0){
             if(teamInfo != null){
@@ -633,7 +639,15 @@ public class PlayerInfo {
         if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
             player.setNameTag(TextFormat.colorize('&',teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())));
-
+            if(gameRoom.getType() == GameRoom.GameType.START) {
+                if (gameRoom.getRoomConfig().minutesExp > 0) {
+                    if (updateTime % 60 == 0) {
+                        //每 60s 增加25经验
+                        PlayerData data = WarBridgeMain.getDataManager().getData(getName());
+                        data.addExp(gameRoom.getRoomConfig().minutesExp, "时长奖励");
+                    }
+                }
+            }
 
         }else if(playerType == PlayerType.WAIT){
             if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition().getY() - player.getY() > getGameRoom().getRoomConfig().callbackY){
