@@ -1,6 +1,6 @@
 name: WarBridge
 main: org.sobadfish.warbridge.WarBridgeMain
-version: 1.0.1
+version: 1.0.2
 api:
   - 1.0.11
   - 3.0.0

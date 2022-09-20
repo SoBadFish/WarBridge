@@ -196,6 +196,25 @@ public class PlayerInfo {
         }
         getPlayer().getLevel().addSound(getPlayer(),sound);
     }
+    /**
+     * 发送音效
+     * */
+    public void addSound(Sound sound,float v1,float v2){
+        if(cancel || isLeave){
+            return;
+        }
+        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2);
+    }
+    /**
+     * 发送音效
+     * */
+    public void addSound(cn.nukkit.level.sound.Sound sound){
+        if(cancel || isLeave){
+            return;
+        }
+        getPlayer().getLevel().addSound(sound,(Player) getPlayer());
+    }
+
 
     /**
      * 增加效果

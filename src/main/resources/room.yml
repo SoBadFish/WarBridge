@@ -8,6 +8,7 @@ max-player-waitTime: 20
 minPlayerSize: 4
 maxPlayerSize: 16
 teamSpawn: {}
+minutesExp: 25
 waitPosition: ""
 ban-command: []
 QuitRoom: []
