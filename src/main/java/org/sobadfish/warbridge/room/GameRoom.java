@@ -437,6 +437,12 @@ public class GameRoom {
         }
     }
 
+    public void addSound(Sound sound,float v1,float v2){
+        for(PlayerInfo info: getPlayerInfos()){
+            info.addSound(sound,v1,v2);
+        }
+    }
+
     public void addSound(Sound sound){
         for(PlayerInfo info: getPlayerInfos()){
             info.addSound(sound);
@@ -693,7 +699,7 @@ public class GameRoom {
 
                 }
                 //音效
-                addSound(Sound.RANDOM_CLICK);
+                addSound(Sound.RANDOM_CLICK,1,1);
 
             }
             if(loadTime == 1){
