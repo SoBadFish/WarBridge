@@ -40,10 +40,7 @@ public class GameRoomConfig {
     public int waitTime;
 
     public int minutesExp = 25;
-    /**
-     * 每分钟获得的经验
-     */
-    public int minutesExp = 25;
+
     /**
      * 满人等待时长
      * */
