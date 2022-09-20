@@ -785,14 +785,13 @@ public class GameRoom {
 
 
     private Long lastTime = 0L;
-    //3秒内不加分
+    //1秒内不加分
     public void addScore(PlayerInfo playerInfo){
         TeamInfo teamInfo = playerInfo.getTeamInfo();
-        if(lastTime == 0){
-            lastTime = System.currentTimeMillis();
-        }
-        if(System.currentTimeMillis() - lastTime < 2000){
+        if(System.currentTimeMillis() - lastTime < 1000){
             return;
+        }else{
+            lastTime = System.currentTimeMillis();
         }
         for(TeamInfo t: getTeamInfos()){
             if(t.hasScore){
