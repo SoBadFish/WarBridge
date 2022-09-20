@@ -194,7 +194,7 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        getPlayer().getLevel().addSound(getPlayer(),sound);
+        addSound(sound,1f,1f);
     }
     /**
      * 发送音效
@@ -203,7 +203,7 @@ public class PlayerInfo {
         if(cancel || isLeave){
             return;
         }
-        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2);
+        getPlayer().getLevel().addSound(getPlayer(),sound,v1,v2,(Player)getPlayer());
     }
     /**
      * 发送音效
