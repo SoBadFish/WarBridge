@@ -422,7 +422,7 @@ public class RoomManager implements Listener {
                 }
 
             }else{
-                if(info.getGameRoom() != null ){
+                if(info.getGameRoom() != null && (info.getGameRoom().getType() != GameType.END || info.getGameRoom().getType() != GameType.CLOSE )){
                     if(!info.getGameRoom().getWorldInfo().getConfig().getWaitPosition().getLevel().getFolderName().equalsIgnoreCase(level.getFolderName())) {
                         info.getGameRoom().quitPlayerInfo(info, false);
                     }
