@@ -678,7 +678,6 @@ public class PlayerInfo {
         }else{
             sendScore(null);
         }
-
     }
 
     public enum PlayerType{
