@@ -76,7 +76,7 @@ public class WarBridgeAdminCommand extends Command {
             commandSender.sendMessage("/wba end 停止模板预设");
             commandSender.sendMessage("/wba float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
             commandSender.sendMessage("/wba cancel 终止房间创建");
-            commandSender.sendMessage("/gda top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
+            commandSender.sendMessage("/wba top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
             StringBuilder v = new StringBuilder("类型: ");
             for(PlayerData.DataType type: PlayerData.DataType.values()){
                 v.append(type.getName()).append(" , ");
