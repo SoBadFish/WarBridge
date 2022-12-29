@@ -454,8 +454,9 @@ public class PlayerInfo {
         ItemAppleGold gold = new ItemAppleGold();
         gold.setCount(8);
         player.getInventory().addItem(gold);
-        player.getInventory().setItem(7,new ItemDiamond());
-        player.getInventory().setItem(8,new ItemArrow());
+        ItemArrow ia = new ItemArrow();
+        ia.setCount(16);
+        player.getInventory().setItem(7,ia);
 
 
 
