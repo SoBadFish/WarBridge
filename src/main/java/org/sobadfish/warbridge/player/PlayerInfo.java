@@ -607,8 +607,8 @@ public class PlayerInfo {
                 lore.add("◎ "+ teamInfo +": &r  &c"+ Utils.getLine(5,Utils.getPercent(teamInfo.score,5),teamInfo.getTeamConfig().getNameColor()+"●","&7●") +me);
             }
             lore.add("       ");
-            lore.add("&b击杀数: &a"+killCount);
-            lore.add("&e助攻数: &a"+assists);
+            lore.add("击杀数: &a"+killCount);
+            lore.add("助攻数: &a"+assists);
 
             lore.add("         ");
         }
