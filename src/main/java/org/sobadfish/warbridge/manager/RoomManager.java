@@ -49,6 +49,7 @@ import org.sobadfish.warbridge.panel.items.PlayerItem;
 import org.sobadfish.warbridge.player.PlayerData;
 import org.sobadfish.warbridge.player.PlayerInfo;
 import org.sobadfish.warbridge.player.team.TeamInfo;
+import org.sobadfish.warbridge.proxy.ItemProxy;
 import org.sobadfish.warbridge.room.GameRoom;
 import org.sobadfish.warbridge.room.GameRoom.GameType;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
@@ -621,9 +622,20 @@ public class RoomManager implements Listener {
         FormWindowSimple simple = new FormWindowSimple("请选择队伍","");
         for(TeamInfo teamInfoConfig: room.getTeamInfos()){
             Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
+            //得随时翻译回来
+            String ws = ItemProxy.asNewWool(wool.getId()+"");
+            int id,damage;
+            if(ws != null){
+                id = Integer.parseInt(ws.split(":")[0]);
+                damage = Integer.parseInt(ws.split(":")[1]);
+            }else{
+                id = wool.getId();
+                damage = wool.getDamage();
+            }
+
             simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig +" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
                     new ElementButtonImageData("path",
-                            ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
+                            ItemIDSunName.getIDByPath(id,damage))));
         }
         player.showFormWindow(simple,1002);
         TeamChoseItem.clickAgain.remove(player);
