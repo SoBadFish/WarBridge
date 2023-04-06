@@ -34,7 +34,7 @@ public class PlayerLocationRunnable extends PluginTask<WarBridgeMain> {
                         Position position;
                         for(TeamInfo teamInfo1: room.getTeamInfos()){
                             position = teamInfo1.getTeamConfig().getScorePosition();
-                            if(Utils.inArea(player,position,true)){
+                            if(Utils.inArea(player,position,true) && room.gameStart == 0){
                                 if(teamInfo1.equals(teamInfo)){
                                     info.spawn();
                                 }else{

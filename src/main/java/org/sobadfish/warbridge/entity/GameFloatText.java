@@ -7,7 +7,6 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.manager.FloatTextManager;
 import org.sobadfish.warbridge.room.GameRoom;
@@ -15,6 +14,12 @@ import org.sobadfish.warbridge.room.GameRoom;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * 浮空字实体类
+ * 测试的基本没有问题，不建议修改
+ *
+ * @author Sobadfish
+ * */
 public class GameFloatText extends Entity {
 
     public String name;
@@ -26,7 +31,7 @@ public class GameFloatText extends Entity {
     //如果不为null 就是房间内的浮空字 到时候需要移除
     public GameRoom room;
 
-    public List<Player> player = new CopyOnWriteArrayList<>();
+    public List<String> player = new CopyOnWriteArrayList<>();
 
     public GameFloatText(String name, FullChunk fullChunk, CompoundTag compoundTag) {
         super(fullChunk, compoundTag);
@@ -53,6 +58,10 @@ public class GameFloatText extends Entity {
     }
 
 
+    /**
+     * 设置浮空字显示内容
+     * @param text 显示的文本
+     * */
     public void setText(String text) {
         this.text = text;
         this.setNameTag(TextFormat.colorize('&',text));
@@ -84,6 +93,16 @@ public class GameFloatText extends Entity {
     }
 
 
+    /**
+     * 在固定的位置显示浮空字信息
+     * 如果想动态更新文本信息，就将返回的浮空字实体缓存
+     * 调用setText方法即可
+     * @param name 浮空字的名称
+     * @param position 浮空字位置
+     * @param text 浮空字显示的文本信息
+     *
+     * @return @{@link GameFloatText} 浮空字实体
+     * */
     public static GameFloatText showFloatText(String name, Position position, String text){
         GameFloatText text1;
         try {
@@ -97,27 +116,35 @@ public class GameFloatText extends Entity {
         return text1;
     }
 
+    /**
+     * 显示给玩家，不过这个已经在
+     * {@link org.sobadfish.warbridge.thread.PluginMasterRunnable}
+     * 写好调用了，不需要再重复调用
+     * */
     public void disPlayers(){
-        for(Player player: player){
-            if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
-                if(this.hasSpawned.containsValue(player)){
-                    this.despawnFrom(player);
-                }
-                spawnTo(player);
-            }else{
+        for(String player: player){
+            Player player1 = Server.getInstance().getPlayer(player);
+            if(player1 == null){
                 this.player.remove(player);
-                RemoveEntityPacket dp = new RemoveEntityPacket();
-                dp.eid = getId();
-                player.dataPacket(dp);
+            }else {
+                if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
+                    if (this.hasSpawned.containsValue(player1)) {
+                        this.despawnFrom(player1);
+                    }
+                    spawnTo(player1);
+                } else {
+                    this.player.remove(player);
+                    close();
+                }
             }
         }
     }
 
     private void toDisplay(){
         for(Player player: Server.getInstance().getOnlinePlayers().values()){
-            if(!this.player.contains(player)) {
+            if(!this.player.contains(player.getName())) {
                 if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
-                    this.player.add(player);
+                    this.player.add(player.getName());
                     spawnTo(player);
                 }
             }
