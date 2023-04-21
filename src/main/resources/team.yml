@@ -1,14 +1,14 @@
 team:
   - name: "红队"
     nameColor: "&c"
-    blockWoolColor: "35:14"
+    blockWoolColor: "159:14"
     rgb:
       r: 255
       g: 0
       b: 0
   - name: "蓝队"
     nameColor: "&9"
-    blockWoolColor: "35:11"
+    blockWoolColor: "159:11"
     rgb:
       r: 0
       g: 0

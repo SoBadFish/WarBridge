@@ -40,7 +40,7 @@ public class ItemProxy {
             }
 
         }
-        return null;
+        return id;
     }
 
     public static Item getItem(String id){
