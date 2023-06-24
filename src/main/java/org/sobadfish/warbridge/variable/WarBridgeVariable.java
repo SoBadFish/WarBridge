@@ -39,14 +39,14 @@ public class WarBridgeVariable extends BaseVariableV2 {
                     p+= room.getPlayerInfos().size();
                 }
             }
-            addVariable("%"+worldRoom.getName()+"-player%",p+"");
+            addVariable("%wb-"+worldRoom.getName()+"-player%",p+"");
 
         }
         int game = 0;
         for(GameRoom gameRoom: WarBridgeMain.getRoomManager().getRooms().values()){
             game += gameRoom.getPlayerInfos().size();
         }
-        addVariable("%all-player%",game+"");
+        addVariable("%wb-all-player%",game+"");
 
     }
 
@@ -68,8 +68,8 @@ public class WarBridgeVariable extends BaseVariableV2 {
                 default:break;
             }
         }
-        addVariable("%"+roomConfig.getName()+"-player%",p+"");
-        addVariable("%"+roomConfig.getName()+"-maxplayer%",mp+"");
-        addVariable("%"+roomConfig.getName()+"-status%",status);
+        addVariable("%wb-"+roomConfig.getName()+"-player%",p+"");
+        addVariable("%wb-"+roomConfig.getName()+"-maxplayer%",mp+"");
+        addVariable("%wb-"+roomConfig.getName()+"-status%",status);
     }
 }
