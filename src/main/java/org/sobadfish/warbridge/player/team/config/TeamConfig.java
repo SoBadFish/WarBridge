@@ -3,7 +3,7 @@ package org.sobadfish.warbridge.player.team.config;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.BlockColor;
-import org.sobadfish.warbridge.proxy.ItemProxy;
+
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -73,7 +73,7 @@ public class TeamConfig {
         int r = Integer.parseInt(m.get("r").toString());
         int g = Integer.parseInt(m.get("g").toString());
         int b = Integer.parseInt(m.get("b").toString());
-        TeamConfig teamConfig = new TeamConfig(name,nameColor, ItemProxy.getItem(map.get("blockWoolColor")
+        TeamConfig teamConfig = new TeamConfig(name,nameColor,Item.fromString(map.get("blockWoolColor")
                 .toString()),new BlockColor(r,g,b));
         if(map.containsKey("inventory")){
             Map<?,?> inventoryMap = (Map<?, ?>) map.get("inventory");

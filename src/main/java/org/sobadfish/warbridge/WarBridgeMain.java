@@ -12,7 +12,6 @@ import org.sobadfish.warbridge.manager.ThreadManager;
 import org.sobadfish.warbridge.manager.data.PlayerDataManager;
 import org.sobadfish.warbridge.manager.data.PlayerTopManager;
 import org.sobadfish.warbridge.panel.lib.AbstractFakeInventory;
-import org.sobadfish.warbridge.proxy.ItemProxy;
 import org.sobadfish.warbridge.room.config.GameRoomConfig;
 import org.sobadfish.warbridge.variable.TipVariable;
 import org.sobadfish.warbridge.variable.WarBridgeVariable;
@@ -61,7 +60,6 @@ public class WarBridgeMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&c本插件为原创插件 部分源代码出处已标明原作者"));
         this.getLogger().info(TextFormat.colorize('&',"&a战桥插件加载完成，祝您使用愉快"));
 
-        ItemProxy.init();
         loadConfig();
         this.getServer().getCommandMap().register("warbridge",new WarBridgeAdminCommand("wba"));
         this.getServer().getCommandMap().register("warbridge",new WarBridgeCommand("wb"));
