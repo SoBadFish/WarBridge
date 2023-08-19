@@ -39,6 +39,8 @@ public class GameRoomConfig {
      * */
     public int waitTime;
 
+    public double pointRadius;
+
     public int minutesExp = 25;
 
     /**
@@ -151,6 +153,14 @@ public class GameRoomConfig {
         return maxWaitTime;
     }
 
+    public double getPointRadius() {
+        return pointRadius;
+    }
+
+    public void setPointRadius(double pointRadius) {
+        this.pointRadius = pointRadius;
+    }
+
     public String getName() {
         return name;
     }
@@ -232,6 +242,7 @@ public class GameRoomConfig {
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
+                roomConfig.pointRadius = room.getDouble("point-radius",1.5d);
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 List<FloatTextInfoConfig> configs = new ArrayList<>();

@@ -16,6 +16,7 @@ import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.DyeColor;
 import org.sobadfish.warbridge.WarBridgeMain;
+import org.sobadfish.warbridge.room.GameRoom;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -118,9 +119,10 @@ public class Utils {
         return ls +others.toString();
     }
 
-    public static boolean inArea(Position player,Position location,boolean y){
-        Position n1 = new Position(location.getX() -1.5,location.getY(),location.getZ() - 1.5,location.level);
-        Position n2 = new Position(location.getX() +1.5,location.getY(),location.getZ() + 1.5,location.level);
+    public static boolean inArea(GameRoom room,Position player, Position location, boolean y){
+        double radius = room.roomConfig.pointRadius;
+        Position n1 = new Position(location.getX() -radius,location.getY(),location.getZ() - radius,location.level);
+        Position n2 = new Position(location.getX() +radius,location.getY(),location.getZ() + radius,location.level);
         if(player.level.getFolderName().equalsIgnoreCase(location.level.getFolderName())) {
             if (player.x >= Math.min(n1.getX(), n2.getX())
                     && player.x <= Math.max(n1.getX(), n2.getX())

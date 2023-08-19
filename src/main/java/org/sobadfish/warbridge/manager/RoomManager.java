@@ -968,7 +968,8 @@ public class RoomManager implements Listener {
 
             }
             for(TeamInfo teamInfo: room.getTeamInfos()){
-                if(Utils.inArea(block,teamInfo.getTeamConfig().getScorePosition(),false) || Utils.inArea(block,teamInfo.getTeamConfig().getSpawnPosition(),false)){
+                if(Utils.inArea(room,block,teamInfo.getTeamConfig().getScorePosition(),false) ||
+                        Utils.inArea(room,block,teamInfo.getTeamConfig().getSpawnPosition(),false)){
                     event.setCancelled();
                     return;
 

@@ -7,6 +7,7 @@ waitTime: 120
 max-player-waitTime: 20
 minPlayerSize: 4
 maxPlayerSize: 16
+point-radius: 1.5
 teamSpawn: {}
 minutesExp: 25
 waitPosition: ""
