@@ -2,7 +2,6 @@ package org.sobadfish.warbridge.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.warbridge.WarBridgeMain;
 import org.sobadfish.warbridge.entity.GameFloatText;
@@ -15,7 +14,6 @@ import org.sobadfish.warbridge.room.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Sobadfish
@@ -66,7 +64,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 return;
             }
             for (Player player : new ArrayList<>(Server.getInstance().getOnlinePlayers().values())) {
-                for (GameFloatText floatText : new CopyOnWriteArrayList<>(FloatTextManager.floatTextList)) {
+                for (GameFloatText floatText : FloatTextManager.floatTextList) {
                     if (floatText == null) {
                         continue;
                     }
@@ -75,16 +73,17 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                         FloatTextManager.removeFloatText(floatText);
                         continue;
                     }
-                    if (floatText.player.contains(player.getName())) {
-                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
-                            if (!floatText.closed) {
-                                RemoveEntityPacket rp = new RemoveEntityPacket();
-                                rp.eid = floatText.getId();
-                                player.dataPacket(rp);
-                            }
-                            floatText.player.remove(player.getName());
-                        }
-                    }
+//                    if (floatText.player.contains(player.getName())) {
+//                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
+//                            if (!floatText.closed) {
+//                                RemoveEntityPacket rp = new RemoveEntityPacket();
+//                                rp.eid = floatText.getId();
+//                                player.dataPacket(rp);
+//                            }
+//                            floatText.player.remove(player.getName());
+//                        }
+//                    }
+
                     if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
                         if(!floatText.player.contains(player.getName())){
                             floatText.player.add(player.getName());

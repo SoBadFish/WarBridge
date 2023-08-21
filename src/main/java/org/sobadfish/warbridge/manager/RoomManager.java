@@ -20,6 +20,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
+import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.form.element.ElementButton;
@@ -36,6 +37,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.warbridge.WarBridgeMain;
+import org.sobadfish.warbridge.entity.GameFloatText;
 import org.sobadfish.warbridge.event.*;
 import org.sobadfish.warbridge.item.ItemIDSunName;
 import org.sobadfish.warbridge.item.button.RoomQuitItem;
@@ -940,6 +942,21 @@ public class RoomManager implements Listener {
         if(room != null) {
             PlayerInfo info = room.getPlayerInfo(player);
             if (info != null) {
+                event.setCancelled();
+            }
+        }
+    }
+
+    /**
+     * 阻止区块卸载 如果区块卸载会出现如下问题
+     *
+     * 1. 还原房间部分方块无法还原
+     * 2. 导致后台循环报错空指针异常
+     * */
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event){
+        for(Entity entity: event.getChunk().getEntities().values()){
+            if(entity instanceof GameFloatText){
                 event.setCancelled();
             }
         }
