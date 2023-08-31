@@ -134,7 +134,7 @@ public class GameFloatText extends Entity {
                 } else {
                     this.despawnFrom(player1);
                     this.player.remove(player);
-                    close();
+//                    close();
 
                 }
             }
