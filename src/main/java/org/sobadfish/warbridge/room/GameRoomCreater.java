@@ -175,7 +175,7 @@ public class GameRoomCreater {
             return false;
 
         }
-        creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamScore.size()))+"得分点&r [&2"+(teamScore.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+        creater.sendForceMessage("&e继续执行 &r/wba &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(teamScore.size()))+"得分点&r [&2"+(teamScore.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
         return true;
     }
 
